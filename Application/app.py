@@ -1,11 +1,12 @@
 import gradio as gr
+import random as rd
 
 
-def inputPrompt(name):
-    return "Hello " + name
+def random_Yes_No(message, history):
+    return rd.choice(["Yes", "No"])
 
 
-demo = gr.Interface(fn=inputPrompt, inputs=gr.Textbox(), outputs="text")
+demo = gr.ChatInterface(random_Yes_No)
 
 demo.launch()
 
