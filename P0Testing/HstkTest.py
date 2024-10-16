@@ -13,7 +13,7 @@ debug = False
 KwargsDict = {
     "do_sample": True,
     "top_k": 4,
-    "max_new_tokens": 200,
+    "max_new_tokens": 300,
     "clean_up_tokenization_spaces": False
 }
 #running locally
@@ -22,12 +22,9 @@ model = HuggingFaceLocalGenerator(model="google/gemma-2-2b-it",generation_kwargs
 """*****************************Prompt*****************************"""
 #Chat Prompt
 sysMsg = """
-You are a friendly assistant that only gives schorlarly articles on a given topic.
-Give straight to the point answers.
+You are a straight to the point assistant, that gives information on scholarly topics.
 Give answers in a numberd list.
-Do not give answers unless asked.
 If asked to write an essay. Say you cant and deny the question.
-If you cant undestand a question. ask for a new question.
 previous memory: {{memory}}
 Answer only this: {{question}}
 """
@@ -40,9 +37,9 @@ pipe = Pipeline()
 pipe.add_component("essayChecker", checker)
 pipe.add_component("prompt_builder",prompt_builder)
 pipe.add_component("model",model)
+pipe.connect("essayChecker.query","prompt_builder.question")
 pipe.connect("prompt_builder","model")
-#pipe.draw(path="./P0Testing.jpg")
-
+pipe.draw(path="./PipeLineImage.jpg")
 memory = "" #memory for continous chat using bot replies(bad)
 counter = 0
 #Basic Prompt loop for testing
@@ -53,7 +50,7 @@ while True:
     if prompt == "-1":
         break
     #Prompting fixed using PromptBuilder instead of ChatPrmoptBuilder
-    result = pipe.run(data={"prompt_builder": {"question":prompt,"memory":memory}
+    result = pipe.run(data={"prompt_builder": {"memory":memory}
                             ,"essayChecker": {"query" : prompt}}) #Run the pipeline
     print(result['model']['replies'][0])
     counter+= 1
