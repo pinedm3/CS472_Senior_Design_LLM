@@ -7,7 +7,6 @@ from SentenceSimTest import EssayChecker
 #instead of just model reply
 debug = False
 
-
 """*****************************Model Info*****************************"""
 #model args
 KwargsDict = {
@@ -31,18 +30,20 @@ Answer only this: {{question}}
 prompt_builder = PromptBuilder(template=sysMsg)
 """*****************************checker*****************************"""
 checker = EssayChecker()
-
 """*****************************Pipeline*****************************"""
 pipe = Pipeline()
 pipe.add_component("essayChecker", checker)
 pipe.add_component("prompt_builder",prompt_builder)
 pipe.add_component("model",model)
-pipe.connect("essayChecker.query","prompt_builder.question")
-pipe.connect("prompt_builder","model")
+
+pipe.connect("essayChecker.query","prompt_builder.question") #var query passed to var question
+pipe.connect("prompt_builder","model") #prompt passed to model
 pipe.draw(path="./PipeLineImage.jpg")
+
 memory = "" #memory for continous chat using bot replies(bad)
 counter = 0
-#Basic Prompt loop for testing
+
+#Basic Prompt loop
 while True:
     print("Enter prompt(-1 to exit): ")
     prompt = input()
@@ -50,9 +51,15 @@ while True:
     if prompt == "-1":
         break
     #Prompting fixed using PromptBuilder instead of ChatPrmoptBuilder
-    result = pipe.run(data={"prompt_builder": {"memory":memory}
-                            ,"essayChecker": {"query" : prompt}}) #Run the pipeline
-    print(result['model']['replies'][0])
+    #Run the pipeline
+    
+    result = pipe.run(data={"prompt_builder": {"memory":memory} #memory passed to sysMsh memory
+                            ,"essayChecker": {"query" : prompt}}) #var prompt passed to essayChecker query
+    
+    ChatbotOutput = print(result['model']['replies'][0]) #Model Reply byitself
+    print(ChatbotOutput)
+    
+    #basic memory implementation
     counter+= 1
     memory += "Question_Asked number " + str(counter) + ": " + prompt + ". "
     memory += "Responce number " + str(counter) + ": " + result['model']['replies'][0] + ". "#add reply to memory
