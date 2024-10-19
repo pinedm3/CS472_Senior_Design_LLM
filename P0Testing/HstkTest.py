@@ -3,6 +3,7 @@ from haystack import Pipeline
 from haystack.components.generators import HuggingFaceLocalGenerator
 from haystack.components.builders.prompt_builder import PromptBuilder
 from SentenceSimTest import EssayChecker
+from promptInjectionCheck import InjectionCheck
 #Also prints full 'result' info
 #instead of just model reply
 debug = False
@@ -28,14 +29,22 @@ previous memory: {{memory}}
 Answer only this: {{question}}
 """
 prompt_builder = PromptBuilder(template=sysMsg)
+
+
+"""*****************************promptInjector*****************************"""
+injectionChecker = InjectionCheck()
+
 """*****************************checker*****************************"""
-checker = EssayChecker()
+essayChecker = EssayChecker()
+
 """*****************************Pipeline*****************************"""
 pipe = Pipeline()
-pipe.add_component("essayChecker", checker)
+pipe.add_component("essayChecker", essayChecker)
+pipe.add_component("injectionChecker",injectionChecker)
 pipe.add_component("prompt_builder",prompt_builder)
 pipe.add_component("model",model)
 
+pipe.connect("injectionChecker.query","essayChecker.query")
 pipe.connect("essayChecker.query","prompt_builder.question") #var query passed to var question
 pipe.connect("prompt_builder","model") #prompt passed to model
 pipe.draw(path="./PipeLineImage.jpg")
@@ -54,7 +63,7 @@ while True:
     #Run the pipeline
     
     result = pipe.run(data={"prompt_builder": {"memory":memory} #memory passed to sysMsh memory
-                            ,"essayChecker": {"query" : prompt}}) #var prompt passed to essayChecker query
+                            ,"injectionChecker": {"query" : prompt}}) #var prompt passed to essayChecker query
     
     ChatbotOutput = print(result['model']['replies'][0]) #Model Reply byitself
     print(ChatbotOutput)

@@ -49,5 +49,3 @@ class EssayChecker:
             question = input()
         else:
             return {"query": question}
-    
-       
