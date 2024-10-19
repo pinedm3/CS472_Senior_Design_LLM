@@ -2,8 +2,7 @@ from typing import List
 from haystack import Pipeline
 from haystack.components.generators import HuggingFaceLocalGenerator
 from haystack.components.builders.prompt_builder import PromptBuilder
-from SentenceSimTest import EssayChecker
-from promptInjectionCheck import InjectionCheck
+from promptCheckers import PromptCheckers
 #Also prints full 'result' info
 #instead of just model reply
 debug = False
@@ -30,22 +29,16 @@ Answer only this: {{question}}
 """
 prompt_builder = PromptBuilder(template=sysMsg)
 
-
-"""*****************************promptInjector*****************************"""
-injectionChecker = InjectionCheck()
-
 """*****************************checker*****************************"""
-essayChecker = EssayChecker()
+promptChecker = PromptCheckers()
 
 """*****************************Pipeline*****************************"""
 pipe = Pipeline()
-pipe.add_component("essayChecker", essayChecker)
-pipe.add_component("injectionChecker",injectionChecker)
+pipe.add_component("promptChecker",promptChecker)
 pipe.add_component("prompt_builder",prompt_builder)
 pipe.add_component("model",model)
 
-pipe.connect("injectionChecker.query","essayChecker.query")
-pipe.connect("essayChecker.query","prompt_builder.question") #var query passed to var question
+pipe.connect("promptChecker.query","prompt_builder.question") #var query passed to var question
 pipe.connect("prompt_builder","model") #prompt passed to model
 pipe.draw(path="./PipeLineImage.jpg")
 
@@ -63,15 +56,15 @@ while True:
     #Run the pipeline
     
     result = pipe.run(data={"prompt_builder": {"memory":memory} #memory passed to sysMsh memory
-                            ,"injectionChecker": {"query" : prompt}}) #var prompt passed to essayChecker query
+                            ,"promptChecker": {"query" : prompt}}) #var prompt passed to essayChecker query
     
     ChatbotOutput = print(result['model']['replies'][0]) #Model Reply byitself
     print(ChatbotOutput)
     
     #basic memory implementation
     counter+= 1
-    memory += "Question_Asked number " + str(counter) + ": " + prompt + ". "
-    memory += "Responce number " + str(counter) + ": " + result['model']['replies'][0] + ". "#add reply to memory
+    memory += "prompt " + str(counter) + ": " + prompt + ". "
+    memory += "Responce " + str(counter) + ": " + result['model']['replies'][0] + ". "#add reply to memory
     #print(memory)
     if debug:
         print("\n\n")
