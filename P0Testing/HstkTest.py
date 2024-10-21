@@ -54,17 +54,17 @@ while True:
         break
     #Prompting fixed using PromptBuilder instead of ChatPrmoptBuilder
     #Run the pipeline
-    
+
     result = pipe.run(data={"prompt_builder": {"memory":memory} #memory passed to sysMsh memory
                             ,"promptChecker": {"query" : prompt}}) #var prompt passed to essayChecker query
-    
+
     ChatbotOutput = print(result['model']['replies'][0]) #Model Reply byitself
     print(ChatbotOutput)
-    
+
     #basic memory implementation
     counter+= 1
-    memory += "prompt " + str(counter) + ": " + prompt + ". "
-    memory += "Responce " + str(counter) + ": " + result['model']['replies'][0] + ". "#add reply to memory
+    memory += "Question_Asked number " + str(counter) + ": " + prompt + ". "
+    memory += "Responce number " + str(counter) + ": " + result['model']['replies'][0] + ". "#add reply to memory
     #print(memory)
     if debug:
         print("\n\n")
