@@ -1,10 +1,22 @@
-# https://medium.com/@ceejayiwufitness/exploring-bert-and-sbert-for-sentence-similarity-2e7d151ce690 Note for later self
+# py -m pip install transformers[tf] --upgrade
+# py -m pip install tensorflow
+# py -m pip instal sentence-transformers
+# py -m pip install numpy
+# py -m pip install -U six numpy wheel packaging
+# py -m pip install -U keras_preprocessing --no-deps
+# py -m pip install tokenizers
+
+# https://medium.com/@ceejayiwufitness/exploring-bert-and-sbert-for-sentence-similarity-2e7d151ce690
 
 import tensorflow
 import pandas
 import numpy
+import torch
 from pandas import read_csv, DataFrame
 from sentence_transformers import SentenceTransformer
+from transformers import AutoTokenizer, AutoModel
+from sklearn.metrics.pairwise import cosine_similarity
+from tokenizers import BertWordPieceTokenizer
 
 
 # import keras_nlp
@@ -86,9 +98,81 @@ def dropAllExcept(dataframe: DataFrame, kept_columns: list[str]):
             dataframe.drop(labels=column, axis='columns', inplace=True)
     return dataframe
 
+
 # data = parseDataframe('latest_research_articles.csv', 1)
 # data = parseDataframe('phys_and_computsci_articles.csv', 2, data)
 
 # data = dropAllExcept(data, ["title", "abstract"])
 # data.to_csv('Combined_Dataset.csv')
 # print(data)
+
+# tokenizer = BertWordPieceTokenizer(
+
+#    clean_text = False,
+#    handle_chinese_chars = False,
+#    strip_accents = False,
+#    lowercase = False,
+# )
+
+# files = ['Combined_Dataset.csv']
+
+# tokenizer.train(
+#    files,
+#    vocab_size = 2500,
+#    min_frequency = 3,
+#    show_progress = True,
+#    #special_tokens = ['[PAD]', '[UNK]', '[CLS]', '[sep]', '[MASK]'],
+#    limit_alphabet = 10000,
+#    wordpieces_prefix = '##'
+# )
+# tokenizer.add_tokens(['[SEP]'])
+# tokenizer.save_model('.')
+
+# create a BERT tokenizer with trained vocab
+vocab = 'vocab.txt'
+# tokenizer = BertWordPieceTokenizer(vocab)
+
+# test the tokenizer with some text
+# encoded = tokenizer.encode('...')
+# print(encoded.tokens)
+
+
+# model_id = 'sentence-transformers/all-MiniLM-L6-v2'
+# e2e_model = E2ESentenceTransformer(model_id)
+
+Pepe = TFSentenceTransformer()
+tokenizer = AutoTokenizer.from_pretrained('sentence-transformers/msmarco-roberta-base-v2')
+model = AutoModel.from_pretrained('sentence-transformers/msmarco-roberta-base-v2')
+
+
+def run_model(payload: list[str]):
+    encoded_input = tokenizer(payload, padding=True, truncation=True, return_tensors='pt')
+    with torch.no_grad():
+        model_output = model(**encoded_input)
+
+    embeddings = Pepe.mean_pooling(model_output, encoded_input["attention_mask"])
+    similarity = cosine_similarity([embeddings[0], embeddings[1]])
+    norm_similarity = (similarity[1][0] + 1) / 2
+    return norm_similarity
+
+
+def test_model(test_strings: list[str]):
+    similarity = run_model(test_strings)
+    print("Sentences:" + test_strings[0] + " / " + test_strings[1])
+    print(f"Similarity Score: {similarity}")
+
+
+payload = ["This is a sentence embedding", "This is another sentence embedding"]
+test_model(payload)
+payload_2 = ["This is a sentence embedding", "This is another potato with some cheese and basil"]
+test_model(payload_2)
+
+# print(f"Output Shape: {payload_encoded.shape}")
+# print(f"Prediction: {prediction}")
+# e2e_model.summary()
+
+# encoded_input = tokenizer(payload, padding = True, truncation = True, return_tensors = 'tf')
+# sentence_embedding = model(encoded_inputs = encoded_input)
+
+# print(sentence_embedding.shape)
+
