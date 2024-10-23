@@ -1,6 +1,11 @@
+# https://medium.com/@ceejayiwufitness/exploring-bert-and-sbert-for-sentence-similarity-2e7d151ce690 Note for later self
+
 import tensorflow
+import pandas
+import numpy
 from pandas import read_csv, DataFrame
 from sentence_transformers import SentenceTransformer
+
 
 # import keras_nlp
 
@@ -44,3 +49,46 @@ class E2ESentenceTransformer(tensorflow.keras.Model):
     def call(self, inputs):
         tokenized = self.tokenizer(inputs)
         return self.model(tokenized)
+
+
+def parseDataframe(path_to_file, fill_new_or_append: int, dataframe: DataFrame = None, maintain_column_count=True,
+                   keep_header=2):
+    if fill_new_or_append != 1 and fill_new_or_append != 2:
+        raise ValueError("fill_or_append must equal 1 (Fill) or 2 (Append)")
+
+    if keep_header == 2:
+        new_data = read_csv(path_to_file)
+    elif keep_header == 1:
+        new_data = read_csv(path_to_file, header=None)
+    elif keep_header == 0:
+        new_data = read_csv(path_to_file, header=None)
+        new_data = new_data.iloc[1:]
+    else:
+        raise ValueError(
+            "keep_header must equal 0 (Ignore header and delete first row), 1 (No header), or 2 (Keep and use header)")
+
+    if fill_new_or_append == 1:
+        return new_data
+    else:
+        new_frame = DataFrame()
+        for column_name in new_data.columns:
+            if column_name in dataframe.columns:
+                new_frame[column_name] = pandas.concat([new_data[column_name], dataframe[column_name]], axis=0,
+                                                       ignore_index=True)
+            elif column_name not in dataframe and maintain_column_count is False:
+                new_frame[column_name] = new_data[column_name]
+        return new_frame
+
+
+def dropAllExcept(dataframe: DataFrame, kept_columns: list[str]):
+    for column in dataframe.columns:
+        if column not in kept_columns:
+            dataframe.drop(labels=column, axis='columns', inplace=True)
+    return dataframe
+
+# data = parseDataframe('latest_research_articles.csv', 1)
+# data = parseDataframe('phys_and_computsci_articles.csv', 2, data)
+
+# data = dropAllExcept(data, ["title", "abstract"])
+# data.to_csv('Combined_Dataset.csv')
+# print(data)
