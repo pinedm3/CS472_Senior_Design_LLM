@@ -2,7 +2,7 @@ import json
 from haystack.components.converters import JSONConverter
 from haystack.dataclasses import ByteStream
 
-with open("serapiResponce.json", 'r') as file:
+with open("./P0Testing/serapiResponce.json", 'r') as file:
 	textResponce = json.load(file)
     
 
