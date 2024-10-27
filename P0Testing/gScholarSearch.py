@@ -2,7 +2,8 @@
 import json
 import requests
 
-
+#More direct implementation of scholar search
+#Writes responce to file to test and not use search limit
 API_KEY_FILE = 'serpapi_api_key.txt'
 with open(API_KEY_FILE, 'r') as file:
 	api_key = file.readline()
@@ -16,5 +17,5 @@ params = {
 }
 
 response = requests.get(url, params = params)
-file = open("serapiResponce.txt","a")
-file.write(response.json)
+file = open("serapiResponce.json","w")
+file.write(response)
