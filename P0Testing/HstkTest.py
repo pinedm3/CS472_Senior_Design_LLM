@@ -31,7 +31,10 @@ You are a straight to the point assistant, that gives information on scholarly t
 Give answers in a numberd list.
 previous memory: {{memory}}
 {% for document in documents %}
-    {{ document.content }}
+    {{ 
+        document.content 
+    
+    }}
 {% endfor %}
 Answer question: {{question}}
 """
@@ -43,6 +46,8 @@ prompt_builder = PromptBuilder(template=sysMsg)
 converter = JSONConverter(jq_schema=".organic_results[]",content_key="snippet",extra_meta_fields={"title","position","link","publication"})
 #FILE will be document[i].contont -> which gives a 'snippit'
 #             document[i].meta[title,publication,link,position(ranking)] will give other info(single str with "")
+
+
 """*****************************checker*****************************"""
 promptChecker = PromptCheckers()
 
@@ -51,7 +56,7 @@ pipe = Pipeline()
 pipe.add_component("promptChecker",promptChecker)
 pipe.add_component("prompt_builder",prompt_builder)
 pipe.add_component("model",model)
-
+#pipe.add_component("converter", converter)
 pipe.connect("promptChecker.query","prompt_builder.question") #var query passed to var question
 """
 TODO: Either have pchecker query go to new scholar component. Which then will do an api request and grab query info.
