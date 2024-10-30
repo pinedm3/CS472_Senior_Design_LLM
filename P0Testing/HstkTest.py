@@ -9,7 +9,7 @@ from haystack.dataclasses import ByteStream
 #Also prints full 'result' info
 #instead of just model reply
 debug = False
-#TODO First test initial integration of scholar api using a presearch query(Responce.json)
+
 
 """*****************************Model Info*****************************"""
 #model args
@@ -24,7 +24,6 @@ model = HuggingFaceLocalGenerator(model="google/gemma-2-2b-it",generation_kwargs
 
 """*****************************Prompt*****************************"""
 #Chat Prompt
-#TODO Figure out how interact with document[]
 
 sysMsg = """
 You are a straight to the point assistant, that gives information on scholarly topics.
@@ -43,7 +42,7 @@ prompt_builder = PromptBuilder(template=sysMsg)
 
 """*****************************Scholar components*****************************"""
 #TODO Implement haystack components to test json query search
-converter = JSONConverter(jq_schema=".organic_results[]",content_key="snippet",extra_meta_fields={"title","position","link","publication"})
+
 #FILE will be document[i].contont -> which gives a 'snippit'
 #             document[i].meta[title,publication,link,position(ranking)] will give other info(single str with "")
 
