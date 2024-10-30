@@ -1,487 +1,410 @@
 {
   "search_metadata": {
-    "id": "search_5JBAO2bkaoPubaz6j4n7XajE",
+    "id": "search_Zo87gAV43YWh6Ng7rk1PwrlO",
     "status": "Success",
-    "created_at": "2024-10-26T22:14:05Z",
-    "request_time_taken": 0.29,
-    "parsing_time_taken": 0.02,
-    "total_time_taken": 0.3,
-    "request_url": "https://scholar.google.com/scholar?q=Langchain&hl=en",
-    "html_url": "https://www.searchapi.io/api/v1/searches/search_5JBAO2bkaoPubaz6j4n7XajE.html",
-    "json_url": "https://www.searchapi.io/api/v1/searches/search_5JBAO2bkaoPubaz6j4n7XajE"
+    "created_at": "2024-10-30T19:04:07Z",
+    "request_time_taken": 1.21,
+    "parsing_time_taken": 0.01,
+    "total_time_taken": 1.22,
+    "request_url": "https://scholar.google.com/scholar?q=Information+on+nueroscience+2024&hl=en",
+    "html_url": "https://www.searchapi.io/api/v1/searches/search_Zo87gAV43YWh6Ng7rk1PwrlO.html",
+    "json_url": "https://www.searchapi.io/api/v1/searches/search_Zo87gAV43YWh6Ng7rk1PwrlO"
   },
   "search_parameters": {
     "engine": "google_scholar",
-    "q": "Langchain",
+    "q": "Information on nueroscience 2024",
     "hl": "en"
   },
   "search_information": {
-    "query_displayed": "Langchain",
-    "total_results": 3570,
+    "query_displayed": "Information on nueroscience 2024",
+    "total_results": 3340000,
     "page": 1,
-    "time_taken_displayed": 0.09
+    "time_taken_displayed": 0.11,
+    "did_you_mean": {
+      "link": "https://scholar.google.com/scholar?hl=en&as_sdt=0,5&q=Information+on+nueroscience+2024&nfpr=1"
+    }
   },
+  "profiles": [
+    {
+      "name": "Information on nueroscience 2024",
+      "link": "https://scholar.google.com/scholar?hl=en&as_sdt=0,5&q=Information+on+nueroscience+2024&nfpr=1",
+      "cited_by": {
+        "total": 2024
+      }
+    }
+  ],
   "organic_results": [
     {
       "position": 1,
-      "title": "Creating large language model applications utilizing langchain: A primer on developing llm apps fast",
-      "data_cid": "QXV-Nxym8hQJ",
-      "link": "https://www.researchgate.net/profile/Oguzhan-Topsakal/publication/372669736_Creating_Large_Language_Model_Applications_Utilizing_LangChain_A_Primer_on_Developing_LLM_Apps_Fast/links/64d114a840a524707ba4a419/Creating-Large-Language-Model-Applications-Utilizing-LangChain-A-Primer-on-Developing-LLM-Apps-Fast.pdf",
-      "publication": "O Topsakal, TC Akinci - International Conference on Applied …, 2023 - researchgate.net",
-      "snippet": "… LangChain has been widely recognized in the AI community for its ability … LangChain and provide a primer on developing large language model applications rapidly utilizing LangChain…",
-      "type": "PDF",
+      "title": "Mind unveiled: Cutting-edge neuroscience and precision brain mapping",
+      "data_cid": "Q2rePtG2isUJ",
+      "link": "http://asian.go4sending.com/id/eprint/2223/",
+      "publication": "AP Singh, R Saxena, S Saxena… - Asian Journal of …, 2024 - asian.go4sending.com",
+      "snippet": "Neuroscience, a dynamic field at the forefront of scientific exploration, is unravelling the complexities of the human brain. By merging biology, psychology, physics, and computer science…",
       "inline_links": {
         "cited_by": {
-          "cites_id": "1509451465242867009",
-          "total": 173,
-          "link": "https://scholar.google.com/scholar?cites=1509451465242867009&as_sdt=2005&sciodt=0,5&hl=en"
+          "cites_id": "14234390582077057603",
+          "total": 2,
+          "link": "https://scholar.google.com/scholar?cites=14234390582077057603&as_sdt=2005&sciodt=0,5&hl=en"
         },
         "versions": {
-          "cluster_id": "1509451465242867009",
-          "total": 2,
-          "link": "https://scholar.google.com/scholar?cluster=1509451465242867009&hl=en&as_sdt=0,5"
+          "cluster_id": "14234390582077057603",
+          "total": 4,
+          "link": "https://scholar.google.com/scholar?cluster=14234390582077057603&hl=en&as_sdt=0,5"
         },
-        "related_articles_link": "https://scholar.google.com/scholar?q=related:QXV-Nxym8hQJ:scholar.google.com/&scioq=Langchain&hl=en&as_sdt=0,5",
-        "cached_page_link": "https://scholar.googleusercontent.com/scholar?q=cache:QXV-Nxym8hQJ:scholar.google.com/+Langchain&hl=en&as_sdt=0,5"
+        "related_articles_link": "https://scholar.google.com/scholar?q=related:Q2rePtG2isUJ:scholar.google.com/&scioq=Information+on+neuroscience+2024&hl=en&as_sdt=0,5",
+        "cached_page_link": "http://scholar.googleusercontent.com/scholar?q=cache:Q2rePtG2isUJ:scholar.google.com/+Information+on+neuroscience+2024&hl=en&as_sdt=0,5"
       },
       "resource": {
-        "name": "researchgate.net",
+        "name": "go4sending.com",
         "format": "PDF",
-        "link": "https://www.researchgate.net/profile/Oguzhan-Topsakal/publication/372669736_Creating_Large_Language_Model_Applications_Utilizing_LangChain_A_Primer_on_Developing_LLM_Apps_Fast/links/64d114a840a524707ba4a419/Creating-Large-Language-Model-Applications-Utilizing-LangChain-A-Primer-on-Developing-LLM-Apps-Fast.pdf"
+        "link": "http://asian.go4sending.com/id/eprint/2223/1/Singh932024AJOCR12247.pdf"
       },
       "authors": [
         {
-          "name": "O Topsakal",
-          "id": "ukpd7PsAAAAJ",
-          "link": "https://scholar.google.com/citations?user=ukpd7PsAAAAJ&hl=en&oi=sra"
+          "name": "AP Singh",
+          "id": "5Tjb36wAAAAJ",
+          "link": "https://scholar.google.com/citations?user=5Tjb36wAAAAJ&hl=en&oi=sra"
         },
         {
-          "name": "TC Akinci",
-          "id": "GR2VnR4AAAAJ",
-          "link": "https://scholar.google.com/citations?user=GR2VnR4AAAAJ&hl=en&oi=sra"
+          "name": "S Saxena",
+          "id": "KKpxV_EAAAAJ",
+          "link": "https://scholar.google.com/citations?user=KKpxV_EAAAAJ&hl=en&oi=sra"
         }
       ]
     },
     {
       "position": 2,
-      "title": "Revolutionizing mental health care through langchain: A journey with a large language model",
-      "data_cid": "pNvJFXktor0J",
-      "link": "https://ieeexplore.ieee.org/abstract/document/10427865/",
-      "publication": "A Singh, A Ehtesham, S Mahmud… - 2024 IEEE 14th Annual …, 2024 - ieeexplore.ieee.org",
-      "snippet": "Mental health challenges are on the rise in our modern society, and the imperative to address mental disorders, especially regarding anxiety, depression, and suicidal thoughts, …",
+      "title": "Neuroscience in addiction research",
+      "data_cid": "Ywo6M0qp3pMJ",
+      "link": "https://link.springer.com/article/10.1007/s00702-023-02713-7",
+      "publication": "RJ Valentino, SG Nair, ND Volkow - Journal of Neural Transmission, 2024 - Springer",
+      "snippet": "The prevention and treatment of addiction (moderate to severe substance use disorder—SUD) have remained challenging because of the dynamic and complex interactions between …",
       "inline_links": {
         "cited_by": {
-          "cites_id": "13664534217475349412",
-          "total": 13,
-          "link": "https://scholar.google.com/scholar?cites=13664534217475349412&as_sdt=2005&sciodt=0,5&hl=en"
+          "cites_id": "10655139904557288035",
+          "total": 4,
+          "link": "https://scholar.google.com/scholar?cites=10655139904557288035&as_sdt=2005&sciodt=0,5&hl=en"
         },
         "versions": {
-          "cluster_id": "13664534217475349412",
-          "total": 3,
-          "link": "https://scholar.google.com/scholar?cluster=13664534217475349412&hl=en&as_sdt=0,5"
+          "cluster_id": "10655139904557288035",
+          "total": 2,
+          "link": "https://scholar.google.com/scholar?cluster=10655139904557288035&hl=en&as_sdt=0,5"
         },
-        "related_articles_link": "https://scholar.google.com/scholar?q=related:pNvJFXktor0J:scholar.google.com/&scioq=Langchain&hl=en&as_sdt=0,5"
-      },
-      "resource": {
-        "name": "arxiv.org",
-        "format": "PDF",
-        "link": "https://arxiv.org/pdf/2403.05568"
-      },
-      "authors": [
-        {
-          "name": "A Singh",
-          "id": "az0wOaoAAAAJ",
-          "link": "https://scholar.google.com/citations?user=az0wOaoAAAAJ&hl=en&oi=sra"
-        },
-        {
-          "name": "A Ehtesham",
-          "id": "QaJ56B8AAAAJ",
-          "link": "https://scholar.google.com/citations?user=QaJ56B8AAAAJ&hl=en&oi=sra"
-        },
-        {
-          "name": "S Mahmud",
-          "id": "x-lWSoMAAAAJ",
-          "link": "https://scholar.google.com/citations?user=x-lWSoMAAAAJ&hl=en&oi=sra"
-        }
-      ]
+        "related_articles_link": "https://scholar.google.com/scholar?q=related:Ywo6M0qp3pMJ:scholar.google.com/&scioq=Information+on+neuroscience+2024&hl=en&as_sdt=0,5"
+      }
     },
     {
       "position": 3,
-      "title": "Automating Customer Service using LangChain: Building custom open-source GPT Chatbot for organizations",
-      "data_cid": "kesZexNTf6oJ",
-      "link": "https://arxiv.org/abs/2310.05421",
-      "publication": "K Pandya, M Holia - arXiv preprint arXiv:2310.05421, 2023 - arxiv.org",
-      "snippet": "In the digital age, the dynamics of customer service are evolving, driven by technological advancements and the integration of Large Language Models (LLMs). This research paper …",
+      "title": "Unpacking and Utilizing Neuroscience Core Concepts",
+      "data_cid": "Tq9-_lKACtwJ",
+      "link": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11396181/",
+      "publication": "A Chen, KA Phillips, EH Tran… - … Neuroscience …, 2024 - pmc.ncbi.nlm.nih.gov",
+      "snippet": "… only recently been published for neuroscience through a multi-year community-derived project which identified the following neuroscience core concepts: Communication Modalities, …",
+      "type": "HTML",
       "inline_links": {
         "cited_by": {
-          "cites_id": "12285629651624782737",
-          "total": 45,
-          "link": "https://scholar.google.com/scholar?cites=12285629651624782737&as_sdt=2005&sciodt=0,5&hl=en"
+          "cites_id": "15855626532056641358",
+          "total": 2,
+          "link": "https://scholar.google.com/scholar?cites=15855626532056641358&as_sdt=2005&sciodt=0,5&hl=en"
         },
         "versions": {
-          "cluster_id": "12285629651624782737",
-          "total": 2,
-          "link": "https://scholar.google.com/scholar?cluster=12285629651624782737&hl=en&as_sdt=0,5"
+          "cluster_id": "15855626532056641358",
+          "total": 3,
+          "link": "https://scholar.google.com/scholar?cluster=15855626532056641358&hl=en&as_sdt=0,5"
         },
-        "related_articles_link": "https://scholar.google.com/scholar?q=related:kesZexNTf6oJ:scholar.google.com/&scioq=Langchain&hl=en&as_sdt=0,5",
-        "cached_page_link": "https://scholar.googleusercontent.com/scholar?q=cache:kesZexNTf6oJ:scholar.google.com/+Langchain&hl=en&as_sdt=0,5"
+        "related_articles_link": "https://scholar.google.com/scholar?q=related:Tq9-_lKACtwJ:scholar.google.com/&scioq=Information+on+neuroscience+2024&hl=en&as_sdt=0,5"
       },
       "resource": {
-        "name": "arxiv.org",
-        "format": "PDF",
-        "link": "https://arxiv.org/pdf/2310.05421"
+        "name": "nih.gov",
+        "format": "HTML",
+        "link": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11396181/"
       },
       "authors": [
         {
-          "name": "K Pandya",
-          "id": "Swvp-1MAAAAJ",
-          "link": "https://scholar.google.com/citations?user=Swvp-1MAAAAJ&hl=en&oi=sra"
-        },
-        {
-          "name": "M Holia",
-          "id": "as7c3noAAAAJ",
-          "link": "https://scholar.google.com/citations?user=as7c3noAAAAJ&hl=en&oi=sra"
+          "name": "KA Phillips",
+          "id": "JWOv9E8AAAAJ",
+          "link": "https://scholar.google.com/citations?user=JWOv9E8AAAAJ&hl=en&oi=sra"
         }
       ]
     },
     {
       "position": 4,
-      "title": "Poisoned langchain: Jailbreak llms by langchain",
-      "data_cid": "Xbccv9FIV_kJ",
-      "link": "https://arxiv.org/abs/2406.18122",
-      "publication": "Z Wang, J Liu, S Zhang, Y Yang - arXiv preprint arXiv:2406.18122, 2024 - arxiv.org",
-      "snippet": "… The experiments show that the PoisonedLangChain (PLC) successfully carried out indirect … We introduce an innovative technique that utilizes Lang Chain for conducting indirect …",
+      "title": "The potential of neuroscience in transforming business: a meta-analysis",
+      "data_cid": "m3xTKBHpe44J",
+      "link": "https://link.springer.com/article/10.1186/s43093-024-00369-7",
+      "publication": "S Khaneja, T Arora - Future Business Journal, 2024 - Springer",
+      "snippet": "… neuroscience across diverse business domains. The primary objective is to identify innovative neuroscience … uncovered vital intersections between neuroscience and business, offering …",
       "inline_links": {
         "cited_by": {
-          "cites_id": "17966909304109578077",
-          "total": 2,
-          "link": "https://scholar.google.com/scholar?cites=17966909304109578077&as_sdt=2005&sciodt=0,5&hl=en"
+          "cites_id": "10267056035421453467",
+          "total": 1,
+          "link": "https://scholar.google.com/scholar?cites=10267056035421453467&as_sdt=2005&sciodt=0,5&hl=en"
         },
         "versions": {
-          "cluster_id": "17966909304109578077",
-          "total": 2,
-          "link": "https://scholar.google.com/scholar?cluster=17966909304109578077&hl=en&as_sdt=0,5"
+          "cluster_id": "10267056035421453467",
+          "total": 7,
+          "link": "https://scholar.google.com/scholar?cluster=10267056035421453467&hl=en&as_sdt=0,5"
         },
-        "related_articles_link": "https://scholar.google.com/scholar?q=related:Xbccv9FIV_kJ:scholar.google.com/&scioq=Langchain&hl=en&as_sdt=0,5",
-        "cached_page_link": "https://scholar.googleusercontent.com/scholar?q=cache:Xbccv9FIV_kJ:scholar.google.com/+Langchain&hl=en&as_sdt=0,5"
+        "related_articles_link": "https://scholar.google.com/scholar?q=related:m3xTKBHpe44J:scholar.google.com/&scioq=Information+on+neuroscience+2024&hl=en&as_sdt=0,5"
       },
       "resource": {
-        "name": "arxiv.org",
+        "name": "springer.com",
         "format": "PDF",
-        "link": "https://arxiv.org/pdf/2406.18122"
+        "link": "https://link.springer.com/content/pdf/10.1186/s43093-024-00369-7.pdf"
       },
       "authors": [
         {
-          "name": "S Zhang",
-          "id": "uPBWj1gAAAAJ",
-          "link": "https://scholar.google.com/citations?user=uPBWj1gAAAAJ&hl=en&oi=sra"
+          "name": "S Khaneja",
+          "id": "MIh6HrcAAAAJ",
+          "link": "https://scholar.google.com/citations?user=MIh6HrcAAAAJ&hl=en&oi=sra"
+        },
+        {
+          "name": "T Arora",
+          "id": "8hG0FHQAAAAJ",
+          "link": "https://scholar.google.com/citations?user=8hG0FHQAAAAJ&hl=en&oi=sra"
         }
       ]
     },
     {
       "position": 5,
-      "title": "Generative AI service implementation using LLM application architecture: based on RAG model and LangChain framework",
-      "data_cid": "IXFruYes23IJ",
-      "link": "https://koreascience.kr/article/JAKO202302557619339.page",
-      "publication": "C Jeong - Journal of Intelligence and Information Systems, 2023 - koreascience.kr",
-      "snippet": "In a situation where the use and introduction of Large Language Models (LLMs) is expanding due to recent developments in generative AI technology, it is difficult to find actual …",
+      "title": "Integrating Programming into Neuroscience Courses.",
+      "data_cid": "umR4hAzUvTUJ",
+      "link": "https://escholarship.org/uc/item/9g7419zx",
+      "publication": "AL Juavinett - Journal of Undergraduate Neuroscience Education, 2024 - escholarship.org",
+      "snippet": "… for students, both in neuroscience research and in … neuroscience and programming. Throughout, I provide examples of how I have weaved coding into various elements of neuroscience …",
       "inline_links": {
         "cited_by": {
-          "cites_id": "8276398439154807073",
-          "total": 33,
-          "link": "https://scholar.google.com/scholar?cites=8276398439154807073&as_sdt=2005&sciodt=0,5&hl=en"
+          "cites_id": "3872484404835673274",
+          "total": 2,
+          "link": "https://scholar.google.com/scholar?cites=3872484404835673274&as_sdt=2005&sciodt=0,5&hl=en"
         },
-        "related_articles_link": "https://scholar.google.com/scholar?q=related:IXFruYes23IJ:scholar.google.com/&scioq=Langchain&hl=en&as_sdt=0,5",
-        "cached_page_link": "https://scholar.googleusercontent.com/scholar?q=cache:IXFruYes23IJ:scholar.google.com/+Langchain&hl=en&as_sdt=0,5"
+        "versions": {
+          "cluster_id": "3872484404835673274",
+          "total": 4,
+          "link": "https://scholar.google.com/scholar?cluster=3872484404835673274&hl=en&as_sdt=0,5"
+        },
+        "related_articles_link": "https://scholar.google.com/scholar?q=related:umR4hAzUvTUJ:scholar.google.com/&scioq=Information+on+neuroscience+2024&hl=en&as_sdt=0,5",
+        "cached_page_link": "https://scholar.googleusercontent.com/scholar?q=cache:umR4hAzUvTUJ:scholar.google.com/+Information+on+neuroscience+2024&hl=en&as_sdt=0,5"
       },
       "resource": {
-        "name": "koreascience.kr",
+        "name": "escholarship.org",
         "format": "PDF",
-        "link": "https://koreascience.kr/article/JAKO202302557619339.pdf"
+        "link": "https://escholarship.org/content/qt9g7419zx/qt9g7419zx.pdf"
       },
       "authors": [
         {
-          "name": "C Jeong",
-          "id": "DqdlaAcAAAAJ",
-          "link": "https://scholar.google.com/citations?user=DqdlaAcAAAAJ&hl=en&oi=sra"
+          "name": "AL Juavinett",
+          "id": "vAtptFoAAAAJ",
+          "link": "https://scholar.google.com/citations?user=vAtptFoAAAAJ&hl=en&oi=sra"
         }
       ]
     },
     {
       "position": 6,
-      "title": "Current Research and Future Directions for Off-Site Construction through LangChain with a Large Language Model",
-      "data_cid": "QriUvAvDL8IJ",
-      "link": "https://www.mdpi.com/2075-5309/14/8/2374",
-      "publication": "J Jeong, D Gil, D Kim, J Jeong - Buildings, 2024 - mdpi.com",
-      "snippet": "… LangChain … that LangChain can rapidly and effectively summarize research, making it a valuable tool for literature reviews. This study advocates the broader application of LangChain in …",
-      "type": "HTML",
+      "title": "A case for using methods from natural science in advancing the field of cognitive neuroscience",
+      "data_cid": "j-v35-dprR8J",
+      "link": "https://journals.sagepub.com/doi/abs/10.1177/09593543241255335",
+      "publication": "MA Fernandes - Theory & Psychology, 2024 - journals.sagepub.com",
+      "snippet": "Cognitive neuroscience seeks to pinpoint the neural basis of cognitive function. Application of scientific methods can be credited for its advancement within the field of psychology. Past …",
       "inline_links": {
-        "versions": {
-          "cluster_id": "13992617022439340098",
-          "total": 4,
-          "link": "https://scholar.google.com/scholar?cluster=13992617022439340098&hl=en&as_sdt=0,5"
+        "cited_by": {
+          "cites_id": "2282597030896855951",
+          "total": 1,
+          "link": "https://scholar.google.com/scholar?cites=2282597030896855951&as_sdt=2005&sciodt=0,5&hl=en"
         },
-        "related_articles_link": "https://scholar.google.com/scholar?q=related:QriUvAvDL8IJ:scholar.google.com/&scioq=Langchain&hl=en&as_sdt=0,5",
-        "cached_page_link": "https://scholar.googleusercontent.com/scholar?q=cache:QriUvAvDL8IJ:scholar.google.com/+Langchain&hl=en&as_sdt=0,5"
+        "versions": {
+          "cluster_id": "2282597030896855951",
+          "total": 4,
+          "link": "https://scholar.google.com/scholar?cluster=2282597030896855951&hl=en&as_sdt=0,5"
+        },
+        "related_articles_link": "https://scholar.google.com/scholar?q=related:j-v35-dprR8J:scholar.google.com/&scioq=Information+on+neuroscience+2024&hl=en&as_sdt=0,5"
       },
       "resource": {
-        "name": "mdpi.com",
-        "format": "HTML",
-        "link": "https://www.mdpi.com/2075-5309/14/8/2374"
+        "name": "sagepub.com",
+        "format": "PDF",
+        "link": "https://journals.sagepub.com/doi/pdf/10.1177/09593543241255335"
       },
       "authors": [
         {
-          "name": "J Jeong",
-          "id": "oXVSOHAAAAAJ",
-          "link": "https://scholar.google.com/citations?user=oXVSOHAAAAAJ&hl=en&oi=sra"
-        },
-        {
-          "name": "D Gil",
-          "id": "AFBk5TUAAAAJ",
-          "link": "https://scholar.google.com/citations?user=AFBk5TUAAAAJ&hl=en&oi=sra"
-        },
-        {
-          "name": "D Kim",
-          "id": "lxt7Q74AAAAJ",
-          "link": "https://scholar.google.com/citations?user=lxt7Q74AAAAJ&hl=en&oi=sra"
-        },
-        {
-          "name": "J Jeong",
-          "id": "fzLiIUQAAAAJ",
-          "link": "https://scholar.google.com/citations?user=fzLiIUQAAAAJ&hl=en&oi=sra"
+          "name": "MA Fernandes",
+          "id": "wGc8pBYAAAAJ",
+          "link": "https://scholar.google.com/citations?user=wGc8pBYAAAAJ&hl=en&oi=sra"
         }
       ]
     },
     {
       "position": 7,
-      "title": "Designing an Automated Malware Analysis Process Using LangChain",
-      "data_cid": "sfu3bf3IMaAJ",
-      "link": "https://koreascience.kr/article/CFKO202422572242265.page",
-      "publication": "YJ Do, HS Kim - Proceedings of the Korea Information Processing …, 2024 - koreascience.kr",
-      "snippet": "… 본 연구는 LangChain 프레임워크를 사용하여 악성코드 행위를 분석하고 이해할 수 있는 자동화된 리포트 생성 방식을 개발하였다. 해당 프로세스는 LangChain agent 에 의해 자동화되어 …",
-      "inline_links": {
-        "related_articles_link": "https://scholar.google.com/scholar?q=related:sfu3bf3IMaAJ:scholar.google.com/&scioq=Langchain&hl=en&as_sdt=0,5",
-        "cached_page_link": "https://scholar.googleusercontent.com/scholar?q=cache:sfu3bf3IMaAJ:scholar.google.com/+Langchain&hl=en&as_sdt=0,5"
-      },
-      "resource": {
-        "name": "koreascience.kr",
-        "format": "PDF",
-        "link": "https://koreascience.kr/article/CFKO202422572242265.pdf"
-      }
-    },
-    {
-      "position": 8,
-      "title": "Constructing the ChatGPT for PDF Files with Langchain–AI",
-      "data_cid": "ITHhBj9F7FkJ",
-      "link": "https://ieeexplore.ieee.org/abstract/document/10544643/",
-      "publication": "TP Jacob, BLS Bizotto… - 2024 International …, 2024 - ieeexplore.ieee.org",
-      "snippet": "… Through this research work, experienced LLMs, their drawbacks, and how the LangChain framework addresses some of these issues by creating a custom LangChain PDF chatbot in …",
+      "title": "Applied human neuroscience: Fostering and designing inclusive environments with the 3E‐Cognition perspective",
+      "data_cid": "T13Fi3Z5K9oJ",
+      "link": "https://onlinelibrary.wiley.com/doi/abs/10.1111/ejn.16463",
+      "publication": "FJ Parada, A Grasso‐Cladera, A Rossi… - … of Neuroscience, 2024 - Wiley Online Library",
+      "snippet": "The conventional medical paradigm often focuses on deficits and impairments, failing to capture the rich tapestry of experiences and abilities inherent in neurodiversity conditions. In this …",
       "inline_links": {
         "cited_by": {
-          "cites_id": "6479630100879978785",
-          "total": 5,
-          "link": "https://scholar.google.com/scholar?cites=6479630100879978785&as_sdt=2005&sciodt=0,5&hl=en"
+          "cites_id": "15720792474324917583",
+          "total": 1,
+          "link": "https://scholar.google.com/scholar?cites=15720792474324917583&as_sdt=2005&sciodt=0,5&hl=en"
         },
-        "related_articles_link": "https://scholar.google.com/scholar?q=related:ITHhBj9F7FkJ:scholar.google.com/&scioq=Langchain&hl=en&as_sdt=0,5"
+        "versions": {
+          "cluster_id": "15720792474324917583",
+          "total": 5,
+          "link": "https://scholar.google.com/scholar?cluster=15720792474324917583&hl=en&as_sdt=0,5"
+        },
+        "related_articles_link": "https://scholar.google.com/scholar?q=related:T13Fi3Z5K9oJ:scholar.google.com/&scioq=Information+on+neuroscience+2024&hl=en&as_sdt=0,5"
       },
       "authors": [
         {
-          "name": "TP Jacob",
-          "id": "A2kJRxYAAAAJ",
-          "link": "https://scholar.google.com/citations?user=A2kJRxYAAAAJ&hl=en&oi=sra"
+          "name": "FJ Parada",
+          "id": "TQDDs-oAAAAJ",
+          "link": "https://scholar.google.com/citations?user=TQDDs-oAAAAJ&hl=en&oi=sra"
         },
         {
-          "name": "BLS Bizotto",
-          "id": "25TgAuwAAAAJ",
-          "link": "https://scholar.google.com/citations?user=25TgAuwAAAAJ&hl=en&oi=sra"
+          "name": "A Grasso‐Cladera",
+          "id": "cLqB67AAAAAJ",
+          "link": "https://scholar.google.com/citations?user=cLqB67AAAAAJ&hl=en&oi=sra"
+        },
+        {
+          "name": "A Rossi",
+          "id": "DFmmVyMAAAAJ",
+          "link": "https://scholar.google.com/citations?user=DFmmVyMAAAAJ&hl=en&oi=sra"
+        }
+      ]
+    },
+    {
+      "position": 8,
+      "title": "Towards an interdisciplinary “science of the mind”: A call for enhanced collaboration between philosophy and neuroscience",
+      "data_cid": "72GlJivq6_AJ",
+      "link": "https://onlinelibrary.wiley.com/doi/abs/10.1111/ejn.16451",
+      "publication": "A Buccella, U Maoz, L Mudrik - … Journal of Neuroscience, 2024 - Wiley Online Library",
+      "snippet": "… Nowadays, many are intrigued by the idea that neuroscience … instead of striving for neuroscience to replace philosophy in … be established, where neuroscience does not only inspire …",
+      "inline_links": {
+        "cited_by": {
+          "cites_id": "17360226659682574831",
+          "total": 1,
+          "link": "https://scholar.google.com/scholar?cites=17360226659682574831&as_sdt=2005&sciodt=0,5&hl=en"
+        },
+        "versions": {
+          "cluster_id": "17360226659682574831",
+          "total": 6,
+          "link": "https://scholar.google.com/scholar?cluster=17360226659682574831&hl=en&as_sdt=0,5"
+        },
+        "related_articles_link": "https://scholar.google.com/scholar?q=related:72GlJivq6_AJ:scholar.google.com/&scioq=Information+on+neuroscience+2024&hl=en&as_sdt=0,5"
+      },
+      "authors": [
+        {
+          "name": "A Buccella",
+          "id": "_UUMxr0AAAAJ",
+          "link": "https://scholar.google.com/citations?user=_UUMxr0AAAAJ&hl=en&oi=sra"
+        },
+        {
+          "name": "U Maoz",
+          "id": "l3xbpnkAAAAJ",
+          "link": "https://scholar.google.com/citations?user=l3xbpnkAAAAJ&hl=en&oi=sra"
+        },
+        {
+          "name": "L Mudrik",
+          "id": "Pe6diOgAAAAJ",
+          "link": "https://scholar.google.com/citations?user=Pe6diOgAAAAJ&hl=en&oi=sra"
         }
       ]
     },
     {
       "position": 9,
-      "title": "Making a prototype of Seoul historical sites chatbot using Langchain",
-      "data_cid": "kuubW0jb0FkJ",
-      "link": "https://arxiv.org/abs/2402.06929",
-      "publication": "JY Suh, M Kwak, SY Kim, H Cho - arXiv preprint arXiv:2402.06929, 2024 - arxiv.org",
-      "snippet": "… Langchain, the primary infrastructure for driving our natural language processing (NLP) functionalities. Langchain … In our endeavor, prowess of Langchain was unmistakably manifested …",
+      "title": "A perspective on neuroscience data standardization with Neurodata Without Borders",
+      "data_cid": "guwnmD493HMJ",
+      "link": "https://www.jneurosci.org/content/44/38/e0381242024.abstract",
+      "publication": "A Pierré, T Pham, J Pearl, SR Datta, JT Ritt… - … of Neuroscience, 2024 - jneurosci.org",
+      "snippet": "… tools are taking on central roles in neuroscience research. Neurodata Without Borders (NWB)… the neuroscience community and help bridge the gap between experimental neuroscience …",
       "inline_links": {
-        "versions": {
-          "cluster_id": "6471913768352476050",
-          "total": 3,
-          "link": "https://scholar.google.com/scholar?cluster=6471913768352476050&hl=en&as_sdt=0,5"
+        "cited_by": {
+          "cites_id": "8348615148288076930",
+          "total": 2,
+          "link": "https://scholar.google.com/scholar?cites=8348615148288076930&as_sdt=2005&sciodt=0,5&hl=en"
         },
-        "related_articles_link": "https://scholar.google.com/scholar?q=related:kuubW0jb0FkJ:scholar.google.com/&scioq=Langchain&hl=en&as_sdt=0,5",
-        "cached_page_link": "https://scholar.googleusercontent.com/scholar?q=cache:kuubW0jb0FkJ:scholar.google.com/+Langchain&hl=en&as_sdt=0,5"
+        "versions": {
+          "cluster_id": "8348615148288076930",
+          "total": 6,
+          "link": "https://scholar.google.com/scholar?cluster=8348615148288076930&hl=en&as_sdt=0,5"
+        },
+        "related_articles_link": "https://scholar.google.com/scholar?q=related:guwnmD493HMJ:scholar.google.com/&scioq=Information+on+neuroscience+2024&hl=en&as_sdt=0,5"
       },
       "resource": {
         "name": "arxiv.org",
         "format": "PDF",
-        "link": "https://arxiv.org/pdf/2402.06929"
+        "link": "https://arxiv.org/pdf/2310.04317"
       },
       "authors": [
         {
-          "name": "JY Suh",
-          "id": "QpEwMCwAAAAJ",
-          "link": "https://scholar.google.com/citations?user=QpEwMCwAAAAJ&hl=en&oi=sra"
+          "name": "A Pierré",
+          "id": "vi2IDygAAAAJ",
+          "link": "https://scholar.google.com/citations?user=vi2IDygAAAAJ&hl=en&oi=sra"
+        },
+        {
+          "name": "T Pham",
+          "id": "YScKRQEAAAAJ",
+          "link": "https://scholar.google.com/citations?user=YScKRQEAAAAJ&hl=en&oi=sra"
+        },
+        {
+          "name": "SR Datta",
+          "id": "k7FiqDMAAAAJ",
+          "link": "https://scholar.google.com/citations?user=k7FiqDMAAAAJ&hl=en&oi=sra"
+        },
+        {
+          "name": "JT Ritt",
+          "id": "lN-vRsgAAAAJ",
+          "link": "https://scholar.google.com/citations?user=lN-vRsgAAAAJ&hl=en&oi=sra"
         }
       ]
     },
     {
       "position": 10,
-      "title": "Systematic Literature Review Langchain Proposed",
-      "data_cid": "RZdPO1NXsvYJ",
-      "link": "https://ieeexplore.ieee.org/abstract/document/10242497/",
-      "publication": "R Asyrofi, MR Dewi, MI Lutfhi… - 2023 International …, 2023 - ieeexplore.ieee.org",
-      "snippet": "While systematic literature reviews are frequently carried out within software engineering research, performing them in a rigorous and reproducible manner can be difficult. This paper …",
+      "title": "Neurosustainability",
+      "data_cid": "FBRCrNuNAf8J",
+      "link": "https://www.frontiersin.org/journals/human-neuroscience/articles/10.3389/fnhum.2024.1436179/full",
+      "publication": "MH Khalil - Frontiers in Human Neuroscience, 2024 - frontiersin.org",
+      "snippet": "While the human brain has evolved extraordinary abilities to dominate nature, modern living has paradoxically trapped it in a contemporary “cage” that stifles neuroplasticity. Within this …",
       "inline_links": {
         "cited_by": {
-          "cites_id": "17776366694173742917",
-          "total": 9,
-          "link": "https://scholar.google.com/scholar?cites=17776366694173742917&as_sdt=2005&sciodt=0,5&hl=en"
+          "cites_id": "18375123929275700244",
+          "total": 1,
+          "link": "https://scholar.google.com/scholar?cites=18375123929275700244&as_sdt=2005&sciodt=0,5&hl=en"
         },
-        "related_articles_link": "https://scholar.google.com/scholar?q=related:RZdPO1NXsvYJ:scholar.google.com/&scioq=Langchain&hl=en&as_sdt=0,5"
+        "versions": {
+          "cluster_id": "18375123929275700244",
+          "total": 9,
+          "link": "https://scholar.google.com/scholar?cluster=18375123929275700244&hl=en&as_sdt=0,5"
+        },
+        "related_articles_link": "https://scholar.google.com/scholar?q=related:FBRCrNuNAf8J:scholar.google.com/&scioq=Information+on+neuroscience+2024&hl=en&as_sdt=0,5",
+        "cached_page_link": "https://scholar.googleusercontent.com/scholar?q=cache:FBRCrNuNAf8J:scholar.google.com/+Information+on+neuroscience+2024&hl=en&as_sdt=0,5"
+      },
+      "resource": {
+        "name": "frontiersin.org",
+        "format": "PDF",
+        "link": "https://www.frontiersin.org/journals/human-neuroscience/articles/10.3389/fnhum.2024.1436179/pdf"
       },
       "authors": [
         {
-          "name": "R Asyrofi",
-          "id": "d0HfC5UAAAAJ",
-          "link": "https://scholar.google.com/citations?user=d0HfC5UAAAAJ&hl=en&oi=sra"
-        },
-        {
-          "name": "MR Dewi",
-          "id": "0cp6H0YAAAAJ",
-          "link": "https://scholar.google.com/citations?user=0cp6H0YAAAAJ&hl=en&oi=sra"
+          "name": "MH Khalil",
+          "id": "4scQZkwAAAAJ",
+          "link": "https://scholar.google.com/citations?user=4scQZkwAAAAJ&hl=en&oi=sra"
         }
       ]
     }
   ],
-  "related_searches": [
-    {
-      "query": "langchain language models",
-      "highlighted": [
-        "language models"
-      ],
-      "link": "https://scholar.google.com/scholar?hl=en&as_sdt=0,5&qsp=1&q=langchain+language+models&qst=bb"
-    },
-    {
-      "query": "langchain chatbot",
-      "highlighted": [
-        "chatbot"
-      ],
-      "link": "https://scholar.google.com/scholar?hl=en&as_sdt=0,5&qsp=2&q=langchain+chatbot&qst=bb"
-    },
-    {
-      "query": "langchain gpt",
-      "highlighted": [
-        "gpt"
-      ],
-      "link": "https://scholar.google.com/scholar?hl=en&as_sdt=0,5&qsp=3&q=langchain+gpt&qst=bb"
-    },
-    {
-      "query": "langchain question answering",
-      "highlighted": [
-        "question answering"
-      ],
-      "link": "https://scholar.google.com/scholar?hl=en&as_sdt=0,5&qsp=4&q=langchain+question+answering&qst=bb"
-    },
-    {
-      "query": "langchain agent",
-      "highlighted": [
-        "agent"
-      ],
-      "link": "https://scholar.google.com/scholar?hl=en&as_sdt=0,5&qsp=5&q=langchain+agent&qst=bb"
-    },
-    {
-      "query": "langchain retrieval",
-      "highlighted": [
-        "retrieval"
-      ],
-      "link": "https://scholar.google.com/scholar?hl=en&as_sdt=0,5&qsp=6&q=langchain+retrieval&qst=bb"
-    },
-    {
-      "query": "langchain summarization",
-      "highlighted": [
-        "summarization"
-      ],
-      "link": "https://scholar.google.com/scholar?hl=en&as_sdt=0,5&qsp=7&q=langchain+summarization&qst=bb"
-    },
-    {
-      "query": "langchain few shot",
-      "highlighted": [
-        "few shot"
-      ],
-      "link": "https://scholar.google.com/scholar?hl=en&as_sdt=0,5&qsp=8&q=langchain+few+shot&qst=bb"
-    },
-    {
-      "query": "langchain embeddings",
-      "highlighted": [
-        "embeddings"
-      ],
-      "link": "https://scholar.google.com/scholar?hl=en&as_sdt=0,5&qsp=9&q=langchain+embeddings&qst=bb"
-    },
-    {
-      "query": "langchain knowledge graph memory",
-      "highlighted": [
-        "knowledge graph memory"
-      ],
-      "link": "https://scholar.google.com/scholar?hl=en&as_sdt=0,5&qsp=10&q=langchain+knowledge+graph+memory&qst=bb"
-    },
-    {
-      "query": "langchain custom",
-      "highlighted": [
-        "custom"
-      ],
-      "link": "https://scholar.google.com/scholar?hl=en&as_sdt=0,5&qsp=11&q=langchain+custom&qst=bb"
-    },
-    {
-      "query": "langchain documents",
-      "highlighted": [
-        "documents"
-      ],
-      "link": "https://scholar.google.com/scholar?hl=en&as_sdt=0,5&qsp=12&q=langchain+documents&qst=bb"
-    },
-    {
-      "query": "harrison chase langchain",
-      "highlighted": [
-        "harrison chase"
-      ],
-      "link": "https://scholar.google.com/scholar?hl=en&as_sdt=0,5&qsp=13&q=harrison+chase+langchain&qst=bb"
-    },
-    {
-      "query": "langchain vector database",
-      "highlighted": [
-        "vector database"
-      ],
-      "link": "https://scholar.google.com/scholar?hl=en&as_sdt=0,5&qsp=14&q=langchain+vector+database&qst=bb"
-    },
-    {
-      "query": "langchain large language models",
-      "highlighted": [
-        "large language models"
-      ],
-      "link": "https://scholar.google.com/scholar?hl=en&as_sdt=0,5&qsp=15&q=langchain+large+language+models&qst=bb"
-    },
-    {
-      "query": "langchain chatgpt",
-      "highlighted": [
-        "chatgpt"
-      ],
-      "link": "https://scholar.google.com/scholar?hl=en&as_sdt=0,5&qsp=16&q=langchain+chatgpt&qst=bb"
-    }
-  ],
   "pagination": {
     "current": 1,
-    "next": "https://scholar.google.com/scholar?start=10&q=Langchain&hl=en&as_sdt=0,5",
+    "next": "https://scholar.google.com/scholar?start=10&q=Information+on+neuroscience+2024&hl=en&as_sdt=0,5",
     "other_pages": {
-      "2": "https://scholar.google.com/scholar?start=10&q=Langchain&hl=en&as_sdt=0,5",
-      "3": "https://scholar.google.com/scholar?start=20&q=Langchain&hl=en&as_sdt=0,5",
-      "4": "https://scholar.google.com/scholar?start=30&q=Langchain&hl=en&as_sdt=0,5",
-      "5": "https://scholar.google.com/scholar?start=40&q=Langchain&hl=en&as_sdt=0,5",
-      "6": "https://scholar.google.com/scholar?start=50&q=Langchain&hl=en&as_sdt=0,5",
-      "7": "https://scholar.google.com/scholar?start=60&q=Langchain&hl=en&as_sdt=0,5",
-      "8": "https://scholar.google.com/scholar?start=70&q=Langchain&hl=en&as_sdt=0,5",
-      "9": "https://scholar.google.com/scholar?start=80&q=Langchain&hl=en&as_sdt=0,5",
-      "10": "https://scholar.google.com/scholar?start=90&q=Langchain&hl=en&as_sdt=0,5"
+      "2": "https://scholar.google.com/scholar?start=10&q=Information+on+neuroscience+2024&hl=en&as_sdt=0,5",
+      "3": "https://scholar.google.com/scholar?start=20&q=Information+on+neuroscience+2024&hl=en&as_sdt=0,5",
+      "4": "https://scholar.google.com/scholar?start=30&q=Information+on+neuroscience+2024&hl=en&as_sdt=0,5",
+      "5": "https://scholar.google.com/scholar?start=40&q=Information+on+neuroscience+2024&hl=en&as_sdt=0,5",
+      "6": "https://scholar.google.com/scholar?start=50&q=Information+on+neuroscience+2024&hl=en&as_sdt=0,5",
+      "7": "https://scholar.google.com/scholar?start=60&q=Information+on+neuroscience+2024&hl=en&as_sdt=0,5",
+      "8": "https://scholar.google.com/scholar?start=70&q=Information+on+neuroscience+2024&hl=en&as_sdt=0,5",
+      "9": "https://scholar.google.com/scholar?start=80&q=Information+on+neuroscience+2024&hl=en&as_sdt=0,5",
+      "10": "https://scholar.google.com/scholar?start=90&q=Information+on+neuroscience+2024&hl=en&as_sdt=0,5"
     }
   }
 }

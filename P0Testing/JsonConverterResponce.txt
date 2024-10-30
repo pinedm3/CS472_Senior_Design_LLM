@@ -1,61 +1,61 @@
 Search 0: 
-	Title: Creating large language model applications utilizing langchain: A primer on developing llm apps fast
-		publication: O Topsakal, TC Akinci - International Conference on Applied …, 2023 - researchgate.net
-		link: https://www.researchgate.net/profile/Oguzhan-Topsakal/publication/372669736_Creating_Large_Language_Model_Applications_Utilizing_LangChain_A_Primer_on_Developing_LLM_Apps_Fast/links/64d114a840a524707ba4a419/Creating-Large-Language-Model-Applications-Utilizing-LangChain-A-Primer-on-Developing-LLM-Apps-Fast.pdf
+	Title: Mind unveiled: Cutting-edge neuroscience and precision brain mapping
+		snippet: Neuroscience, a dynamic field at the forefront of scientific exploration, is unravelling the complexities of the human brain. By merging biology, psychology, physics, and computer science…
+		link: http://asian.go4sending.com/id/eprint/2223/
+		publication: AP Singh, R Saxena, S Saxena… - Asian Journal of …, 2024 - asian.go4sending.com
 		position: 1
-		snippet: … LangChain has been widely recognized in the AI community for its ability … LangChain and provide a primer on developing large language model applications rapidly utilizing LangChain…
 Search 1: 
-	Title: Revolutionizing mental health care through langchain: A journey with a large language model
-		publication: A Singh, A Ehtesham, S Mahmud… - 2024 IEEE 14th Annual …, 2024 - ieeexplore.ieee.org
-		link: https://ieeexplore.ieee.org/abstract/document/10427865/
+	Title: Neuroscience in addiction research
+		snippet: The prevention and treatment of addiction (moderate to severe substance use disorder—SUD) have remained challenging because of the dynamic and complex interactions between …
+		link: https://link.springer.com/article/10.1007/s00702-023-02713-7
+		publication: RJ Valentino, SG Nair, ND Volkow - Journal of Neural Transmission, 2024 - Springer
 		position: 2
-		snippet: Mental health challenges are on the rise in our modern society, and the imperative to address mental disorders, especially regarding anxiety, depression, and suicidal thoughts, …
 Search 2: 
-	Title: Automating Customer Service using LangChain: Building custom open-source GPT Chatbot for organizations
-		publication: K Pandya, M Holia - arXiv preprint arXiv:2310.05421, 2023 - arxiv.org
-		link: https://arxiv.org/abs/2310.05421
+	Title: Unpacking and Utilizing Neuroscience Core Concepts
+		snippet: … only recently been published for neuroscience through a multi-year community-derived project which identified the following neuroscience core concepts: Communication Modalities, …
+		link: https://pmc.ncbi.nlm.nih.gov/articles/PMC11396181/
+		publication: A Chen, KA Phillips, EH Tran… - … Neuroscience …, 2024 - pmc.ncbi.nlm.nih.gov
 		position: 3
-		snippet: In the digital age, the dynamics of customer service are evolving, driven by technological advancements and the integration of Large Language Models (LLMs). This research paper …
 Search 3: 
-	Title: Poisoned langchain: Jailbreak llms by langchain
-		publication: Z Wang, J Liu, S Zhang, Y Yang - arXiv preprint arXiv:2406.18122, 2024 - arxiv.org
-		link: https://arxiv.org/abs/2406.18122
+	Title: The potential of neuroscience in transforming business: a meta-analysis
+		snippet: … neuroscience across diverse business domains. The primary objective is to identify innovative neuroscience … uncovered vital intersections between neuroscience and business, offering …
+		link: https://link.springer.com/article/10.1186/s43093-024-00369-7
+		publication: S Khaneja, T Arora - Future Business Journal, 2024 - Springer
 		position: 4
-		snippet: … The experiments show that the PoisonedLangChain (PLC) successfully carried out indirect … We introduce an innovative technique that utilizes Lang Chain for conducting indirect …
 Search 4: 
-	Title: Generative AI service implementation using LLM application architecture: based on RAG model and LangChain framework
-		publication: C Jeong - Journal of Intelligence and Information Systems, 2023 - koreascience.kr
-		link: https://koreascience.kr/article/JAKO202302557619339.page
+	Title: Integrating Programming into Neuroscience Courses.
+		snippet: … for students, both in neuroscience research and in … neuroscience and programming. Throughout, I provide examples of how I have weaved coding into various elements of neuroscience …
+		link: https://escholarship.org/uc/item/9g7419zx
+		publication: AL Juavinett - Journal of Undergraduate Neuroscience Education, 2024 - escholarship.org
 		position: 5
-		snippet: In a situation where the use and introduction of Large Language Models (LLMs) is expanding due to recent developments in generative AI technology, it is difficult to find actual …
 Search 5: 
-	Title: Current Research and Future Directions for Off-Site Construction through LangChain with a Large Language Model
-		publication: J Jeong, D Gil, D Kim, J Jeong - Buildings, 2024 - mdpi.com
-		link: https://www.mdpi.com/2075-5309/14/8/2374
+	Title: A case for using methods from natural science in advancing the field of cognitive neuroscience
+		snippet: Cognitive neuroscience seeks to pinpoint the neural basis of cognitive function. Application of scientific methods can be credited for its advancement within the field of psychology. Past …
+		link: https://journals.sagepub.com/doi/abs/10.1177/09593543241255335
+		publication: MA Fernandes - Theory & Psychology, 2024 - journals.sagepub.com
 		position: 6
-		snippet: … LangChain … that LangChain can rapidly and effectively summarize research, making it a valuable tool for literature reviews. This study advocates the broader application of LangChain in …
 Search 6: 
-	Title: Designing an Automated Malware Analysis Process Using LangChain
-		publication: YJ Do, HS Kim - Proceedings of the Korea Information Processing …, 2024 - koreascience.kr
-		link: https://koreascience.kr/article/CFKO202422572242265.page
+	Title: Applied human neuroscience: Fostering and designing inclusive environments with the 3E‐Cognition perspective
+		snippet: The conventional medical paradigm often focuses on deficits and impairments, failing to capture the rich tapestry of experiences and abilities inherent in neurodiversity conditions. In this …
+		link: https://onlinelibrary.wiley.com/doi/abs/10.1111/ejn.16463
+		publication: FJ Parada, A Grasso‐Cladera, A Rossi… - … of Neuroscience, 2024 - Wiley Online Library
 		position: 7
-		snippet: … 본 연구는 LangChain 프레임워크를 사용하여 악성코드 행위를 분석하고 이해할 수 있는 자동화된 리포트 생성 방식을 개발하였다. 해당 프로세스는 LangChain agent 에 의해 자동화되어 …
 Search 7: 
-	Title: Constructing the ChatGPT for PDF Files with Langchain–AI
-		publication: TP Jacob, BLS Bizotto… - 2024 International …, 2024 - ieeexplore.ieee.org
-		link: https://ieeexplore.ieee.org/abstract/document/10544643/
+	Title: Towards an interdisciplinary “science of the mind”: A call for enhanced collaboration between philosophy and neuroscience
+		snippet: … Nowadays, many are intrigued by the idea that neuroscience … instead of striving for neuroscience to replace philosophy in … be established, where neuroscience does not only inspire …
+		link: https://onlinelibrary.wiley.com/doi/abs/10.1111/ejn.16451
+		publication: A Buccella, U Maoz, L Mudrik - … Journal of Neuroscience, 2024 - Wiley Online Library
 		position: 8
-		snippet: … Through this research work, experienced LLMs, their drawbacks, and how the LangChain framework addresses some of these issues by creating a custom LangChain PDF chatbot in …
 Search 8: 
-	Title: Making a prototype of Seoul historical sites chatbot using Langchain
-		publication: JY Suh, M Kwak, SY Kim, H Cho - arXiv preprint arXiv:2402.06929, 2024 - arxiv.org
-		link: https://arxiv.org/abs/2402.06929
+	Title: A perspective on neuroscience data standardization with Neurodata Without Borders
+		snippet: … tools are taking on central roles in neuroscience research. Neurodata Without Borders (NWB)… the neuroscience community and help bridge the gap between experimental neuroscience …
+		link: https://www.jneurosci.org/content/44/38/e0381242024.abstract
+		publication: A Pierré, T Pham, J Pearl, SR Datta, JT Ritt… - … of Neuroscience, 2024 - jneurosci.org
 		position: 9
-		snippet: … Langchain, the primary infrastructure for driving our natural language processing (NLP) functionalities. Langchain … In our endeavor, prowess of Langchain was unmistakably manifested …
 Search 9: 
-	Title: Systematic Literature Review Langchain Proposed
-		publication: R Asyrofi, MR Dewi, MI Lutfhi… - 2023 International …, 2023 - ieeexplore.ieee.org
-		link: https://ieeexplore.ieee.org/abstract/document/10242497/
+	Title: Neurosustainability
+		snippet: While the human brain has evolved extraordinary abilities to dominate nature, modern living has paradoxically trapped it in a contemporary “cage” that stifles neuroplasticity. Within this …
+		link: https://www.frontiersin.org/journals/human-neuroscience/articles/10.3389/fnhum.2024.1436179/full
+		publication: MH Khalil - Frontiers in Human Neuroscience, 2024 - frontiersin.org
 		position: 10
-		snippet: While systematic literature reviews are frequently carried out within software engineering research, performing them in a rigorous and reproducible manner can be difficult. This paper …
 
