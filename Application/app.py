@@ -10,9 +10,13 @@ class Interface:
 
     def output(self, message, history):
         history.append(ChatMessage(role="user", content=message))
-        result = do_search(message)
+        articles = do_search(message)
+        results = []
 
-        return f"Your search results are: {result}"
+        for a in articles:
+            results.append(a["title"])
+
+        return f"Your search results are: {results}"
 
     def run(self):
         self.demo.launch()
