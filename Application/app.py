@@ -1,7 +1,7 @@
 import gradio as gr
 from gradio import ChatMessage
 import random as rd
-from prototype import gemini_generate_search_terms as gen
+from retriever import do_search
 
 
 class Interface:
@@ -10,9 +10,9 @@ class Interface:
 
     def output(self, message, history):
         history.append(ChatMessage(role="user", content=message))
-        generated_search_terms = gen.generate_search_terms(message)
+        result = do_search(message)
 
-        return f"Your search terms are: {generated_search_terms}"
+        return f"Your search results are: {result}"
 
     def run(self):
         self.demo.launch()
