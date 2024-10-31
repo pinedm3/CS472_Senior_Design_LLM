@@ -1,5 +1,6 @@
 import gradio as gr
 from gradio import ChatMessage
+from gradio import Chatbot
 import random as rd
 from retriever import do_search
 from prototype import gemini_generate_search_terms as gen
@@ -11,6 +12,7 @@ class Interface:
         self.isTest = isTest
         if self.isTest:
             self.demo = gr.ChatInterface(self.outputTest, type="messages")
+            self.demo.chatbot.placeholder = "<strong>Hello, welcome to the AI-Powered Research Assistant!</strong><br>To begin, describe your research question and I'll fetch scholarly articles that match that topic."
         else:
             self.demo = gr.ChatInterface(self.output, type="messages")
 
