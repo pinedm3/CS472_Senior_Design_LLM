@@ -253,3 +253,4 @@ fabric.properties
 
 .idea/
 /prototype/gemini_api_key.txt
+/.gradio/certificate.pem
