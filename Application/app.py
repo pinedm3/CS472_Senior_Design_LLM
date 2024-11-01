@@ -4,6 +4,7 @@ from gradio import Chatbot
 import random as rd
 from retriever import do_search
 from prototype import gemini_generate_search_terms as gen
+from prototype import google_scholar_search as gs
 
 
 class Interface:
@@ -30,7 +31,19 @@ class Interface:
         history.append(ChatMessage(role="user", content=message))
         generated_search_terms = gen.generate_search_terms(message)
 
-        return f"Your search terms are: {generated_search_terms}"
+        all_results= []
+        for term in generated_search_terms:
+            for result in gs.do_search(term)[:4]:
+                all_results.append(result)
+        
+        output_string: str = ""
+        index = 1
+        for result in all_results:
+            output_string += str(index) + ". %s\n %s\n" % (result["title"], result["link"])
+
+
+
+        return output_string
 
     def run(self):
         self.demo.launch()
