@@ -5,7 +5,17 @@ from statistics import fmean
 import torch
 import sys
 @component
-class PromptCheckers:
+class PromptCheckers:   
+    def typeOfQuery(query:str) -> str:
+        text = query
+        hypothesis_template = "This example is asking for {}"
+        classes_verbalized = ["summary", "search", "essay"]
+        zeroshot_classifier = pipeline("zero-shot-classification", model="MoritzLaurer/deberta-v3-base-zeroshot-v1.1-all-33")
+        output = zeroshot_classifier(text, classes_verbalized, hypothesis_template=hypothesis_template, multi_label=False)
+        print(output)
+        return output['labels'][0]
+    
+    
     """
     Prevent user from trying to write an essay or prompt inject
     """
@@ -51,13 +61,14 @@ class PromptCheckers:
         while True:
             if(prompt == -1):
                 sys.exit()
-            embeddings1 = essayModel.encode(prompt)
-            # Compute cosine similarities
-            similarities = essayModel.similarity(embeddings1, embeddings2)
-            #print(similarities.data[0])
-            avg = fmean(similarities.data[0])
-            print(avg)
-            if(avg > .40):
+            # embeddings1 = essayModel.encode(prompt)
+            # # Compute cosine similarities
+            # similarities = essayModel.similarity(embeddings1, embeddings2)
+            # #print(similarities.data[0])
+            # avg = fmean(similarities.data[0])
+            # print(avg)
+            # if(avg > .40):
+            if(PromptCheckers.typeOfQuery(prompt) == 'essay'):
                 print("Detected trying to write essay\n prompt again: ")
                 prompt = input()
                 continue
