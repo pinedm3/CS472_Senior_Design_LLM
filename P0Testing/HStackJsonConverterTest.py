@@ -5,7 +5,7 @@ from haystack import Pipeline
 from haystack.document_stores.in_memory import InMemoryDocumentStore
 from haystack.components.embedders import SentenceTransformersTextEmbedder, SentenceTransformersDocumentEmbedder
 from haystack.components.retrievers import InMemoryEmbeddingRetriever
-from gScholarSearch import gScholarSearch
+from P0Testing.seraApiTodocEmbbed import gScholarSearch
 
 
 
@@ -18,7 +18,7 @@ from gScholarSearch import gScholarSearch
 #converterResults = converter.run(sources=[info])
 
 #Converter results grabing only haystack document
-documents = gScholarSearch("Information on nueroscience 2024")
+documents = gScholarSearch(query)
 
 #Document embedder setup
 docStore = InMemoryDocumentStore(embedding_similarity_function="cosine")
@@ -26,6 +26,7 @@ docEmbedder = SentenceTransformersDocumentEmbedder(model="intfloat/e5-large-v2",
 docEmbedder.warm_up()
 docEmbbed = docEmbedder.run(documents)["documents"]
 docStore.write_documents(docEmbbed)
+
 
 #Retreiver pipleline
 docPrepPipeLine = Pipeline()
@@ -43,7 +44,7 @@ print(result['retriever']['documents'][0])
 
 #Text file representation of document contents
 
-with open("JsonConverterResponce.txt","w") as file:
+with open("JsonConverterResponce2.txt","w") as file:
 	for i in range(0,documents.__len__()):
 		file.write("Search " + str(i) + ": \n")
 		file.write("	Title: "+ "%s" % documents[i].content + "\n")

@@ -3,14 +3,41 @@ from haystack import Pipeline
 from haystack.components.generators import HuggingFaceLocalGenerator
 from haystack.components.builders.prompt_builder import PromptBuilder
 from promptCheckers import PromptCheckers
-import json
+from seraApiTodocEmbbed import seraApiTodocEmbbed
 from haystack.components.converters import JSONConverter
 from haystack.dataclasses import ByteStream
+from haystack.document_stores.in_memory import InMemoryDocumentStore
+from haystack.components.embedders import SentenceTransformersTextEmbedder, SentenceTransformersDocumentEmbedder
+from haystack.components.retrievers import InMemoryEmbeddingRetriever
+from haystack.components.routers import TransformersZeroShotTextRouter
+from haystack.components.routers import ConditionalRouter
+from transformers import pipeline
 #Also prints full 'result' info
 #instead of just model reply
 debug = False
 
+"""*****************************promptMessages*****************************"""
+sysMsg = """
+You are a straight to the point assistant, that gives information on scholarly topics.
+Give answers in a numberd list.
+previous memory: {{memory}}
+Answer question: {{question}}
 
+"""
+searchPrompt = """
+You are a straight to the point assistant, that gives information on scholarly topics.
+Using the returned results information: 
+{% if documents != NoneType %}
+    {% for document in documents %}
+    
+       {{ document.content }}
+       {{ document.meta['title'] }}
+       {{ document.meta['publication'] }}
+        {{ document.meta['link'] }}
+    {% endfor %}
+{% endif %}
+Answer this: {{question}}
+"""
 """*****************************Model Info*****************************"""
 #model args
 KwargsDict = {
@@ -21,42 +48,23 @@ KwargsDict = {
 }
 #running locally
 model = HuggingFaceLocalGenerator(model="google/gemma-2-2b-it",generation_kwargs=KwargsDict)
+"""*****************************Scholar PipeLine STUFF*****************************"""
+#could also be doucment[0]
 
-"""*****************************Prompt*****************************"""
-#Chat Prompt
-
-sysMsg = """
-You are a straight to the point assistant, that gives information on scholarly topics.
-Give answers in a numberd list.
-previous memory: {{memory}}
-{% for document in documents %}
-    {{ 
-        document.content 
-    
-    }}
-{% endfor %}
-Answer question: {{question}}
-"""
-
-prompt_builder = PromptBuilder(template=sysMsg)
-
-"""*****************************Scholar components*****************************"""
-#TODO Implement haystack components to test json query search
-
+promptBuilder = PromptBuilder(template=searchPrompt)
 #FILE will be document[i].contont -> which gives a 'snippit'
 #             document[i].meta[title,publication,link,position(ranking)] will give other info(single str with "")
-
-
-"""*****************************checker*****************************"""
-promptChecker = PromptCheckers()
-
-"""*****************************Pipeline*****************************"""
-pipe = Pipeline()
-pipe.add_component("promptChecker",promptChecker)
-pipe.add_component("prompt_builder",prompt_builder)
-pipe.add_component("model",model)
-#pipe.add_component("converter", converter)
-pipe.connect("promptChecker.query","prompt_builder.question") #var query passed to var question
+#searchApiPrompt = PromptBuilder(template=searchPrompt)
+docStore = InMemoryDocumentStore(embedding_similarity_function="cosine")
+docEmbedder = SentenceTransformersDocumentEmbedder(model="intfloat/e5-large-v2", prefix="passage", meta_fields_to_embed={"link","publication","position"}) #Embbeds document
+docEmbedder.warm_up()
+retriever = InMemoryEmbeddingRetriever(document_store=docStore)
+docPrepPipeLine = Pipeline()
+docPrepPipeLine.add_component("textEmbedder", SentenceTransformersTextEmbedder(model="intfloat/e5-large-v2", prefix="passage")) #embbeds query text
+docPrepPipeLine.add_component("retriever", retriever)
+docPrepPipeLine.connect("textEmbedder.embedding", "retriever.query_embedding")
+docPrepPipeLine.draw(path="./scholarPipeline.jpg")
+"""*****************************regularPipeline*****************************"""
 """
 TODO: Either have pchecker query go to new scholar component. Which then will do an api request and grab query info.
       Which will then give the info to the prompt Checker.
@@ -65,13 +73,26 @@ TODO: Either have pchecker query go to new scholar component. Which then will do
             Such as the title,snippit,publication, and link
                 Would require either to give all search rankings or only the documet[0] or something similar
 """
-pipe.connect("prompt_builder","model") #prompt passed to model
-pipe.draw(path="./PipeLineImage.jpg")
+"""*****************************checker*****************************"""
+
+promptBuilder = PromptBuilder(template=searchPrompt)
+
+regularPipe = Pipeline()
+regularPipe.add_component("promptChecker",PromptCheckers())
+regularPipe.add_component("promptBuilder",promptBuilder)
+regularPipe.add_component("model",model)
+#Scholar api connections
+
+#var query passed to var question
+
+regularPipe.connect("promptChecker.query", "promptBuilder.question")
+regularPipe.connect("promptBuilder.prompt","model.prompt") #prompt passed to model
+regularPipe.draw(path="./PipeLineImage.jpg")
 
 memory = "" #memory for continous chat using bot replies(bad)
 counter = 0
-
-
+#******************************************************************************
+ChatbotOutput = ""
 #Basic Prompt loop
 while True:
     print("Enter prompt(-1 to exit): ")
@@ -79,20 +100,25 @@ while True:
     print("\nReply:")
     if prompt == "-1":
         break
-    #Prompting fixed using PromptBuilder instead of ChatPrmoptBuilder
-    #Run the pipeline
-
-    result = pipe.run(data={"prompt_builder": {"memory":memory} #memory passed to sysMsh memory
-                            ,"promptChecker": {"query" : prompt}}) #var prompt passed to essayChecker query
-
-    ChatbotOutput = print(result['model']['replies'][0]) #Model Reply byitself
-    print(ChatbotOutput)
-
-    #basic memory implementation
+    
+    queryType = PromptCheckers.typeOfQuery(prompt)
+    #oneshot classifer detects whether search
+    if  queryType == 'search':
+        print("Query is of search type")
+        docStore.write_documents(seraApiTodocEmbbed(prompt,docEmbedder),policy='DuplicatePolicy.SKIP') #function call to to scholar search and return doc embedd     
+    #Summary is just fallhback for now
+    else:         
+        print("Query is of other type")
+    searchResult = docPrepPipeLine.run({"textEmbedder" : {"text" : prompt}})
+    ChatbotDocumentOutput = searchResult['retriever']['documents']
+    regResult = regularPipe.run(data={"promptBuilder":  {"template_variables": {"memory":memory, "documents": ChatbotDocumentOutput}} #memory passed to sysMsh memory
+                        ,"promptChecker": {"query" : prompt} #var prompt passed to essayChecker query
+                        }) 
+    ChatbotOutput = print(regResult['model']['replies'][0]) #Model Reply byitself
     counter+= 1
+    
+    #basic memory implementation
     memory += "Question_Asked number " + str(counter) + ": " + prompt + ". "
-    memory += "Responce number " + str(counter) + ": " + result['model']['replies'][0] + ". "#add reply to memory
-    #print(memory)
-    if debug:
-        print("\n\n")
-        print(result)
+    memory += "Responce number " + str(counter) + ": " + regResult['model']['replies'][0] + ". "#add reply to memory
+    
+    print(ChatbotOutput)
