@@ -1,6 +1,6 @@
 from haystack import component
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipeline
-from sentence_transformers import SentenceTransformer
+#from sentence_transformers import SentenceTransformer
 from statistics import fmean
 import torch
 import sys
@@ -34,8 +34,8 @@ class PromptCheckers:
             device=torch.device("cuda" if torch.cuda.is_available() else "cpu"),
             )
 
-        essayModel = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
-        sentences2 = [
+        #essayModel = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+        """sentences2 = [
             "Compose an essay for me.",
             "Can you draft an essay for me?",
             "Please write an essay for me.",
@@ -53,10 +53,10 @@ class PromptCheckers:
             "Would you help me by writing an essay?"
             "Hello write an essay about"
         ]
-        
+        """
         #print(question)
         # Compute embeddings for both lists
-        embeddings2 = essayModel.encode(sentences2)
+        #embeddings2 = essayModel.encode(sentences2)
         
         while True:
             if(prompt == -1):
