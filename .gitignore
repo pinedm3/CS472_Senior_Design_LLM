@@ -254,3 +254,4 @@ fabric.properties
 .idea/
 /prototype/gemini_api_key.txt
 /.gradio/certificate.pem
+P0Testing/serpapi_api_key.txt
