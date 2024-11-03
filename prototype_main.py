@@ -8,7 +8,7 @@ from Application import app
 # We will replace the Gemini API with a local model and the Serpapi API with a database + search model
 
 
-UI = app.Interface()
+UI = app.Interface(True)
 UI.run()
 
 """user_query = input("Search: ")
