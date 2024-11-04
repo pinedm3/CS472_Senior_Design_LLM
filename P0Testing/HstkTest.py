@@ -4,14 +4,9 @@ from haystack.components.generators import HuggingFaceLocalGenerator
 from haystack.components.builders.prompt_builder import PromptBuilder
 from promptCheckers import PromptCheckers
 from seraApiTodocEmbbed import seraApiTodocEmbbed
-from haystack.components.converters import JSONConverter
-from haystack.dataclasses import ByteStream
 from haystack.document_stores.in_memory import InMemoryDocumentStore
 from haystack.components.embedders import SentenceTransformersTextEmbedder, SentenceTransformersDocumentEmbedder
 from haystack.components.retrievers import InMemoryEmbeddingRetriever
-from haystack.components.routers import TransformersZeroShotTextRouter
-from haystack.components.routers import ConditionalRouter
-from transformers import pipeline
 #Also prints full 'result' info
 #instead of just model reply
 debug = False

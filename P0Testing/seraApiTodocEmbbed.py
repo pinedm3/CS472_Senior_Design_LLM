@@ -5,15 +5,16 @@ from haystack.dataclasses import ByteStream
 from haystack.components.converters import JSONConverter
 from haystack.dataclasses import ByteStream
 from haystack import component
-from haystack.document_stores.in_memory import InMemoryDocumentStore
-from haystack.components.embedders import SentenceTransformersTextEmbedder, SentenceTransformersDocumentEmbedder
-from haystack.components.retrievers import InMemoryEmbeddingRetriever
+from haystack.components.embedders import SentenceTransformersDocumentEmbedder
+
 #More direct implementation of scholar search
 #Writes responce to file to test and not use search limit
 """
 Search seraAPI using query and return inMemoryDocument store to give to promptBuilder
 """
 def seraApiTodocEmbbed(query:str, documentEmbedder: SentenceTransformersDocumentEmbedder) -> list:
+  #Commented out to save api requests
+  
   """
   API_KEY_FILE = 'serpapi_api_key.txt'
   
@@ -27,7 +28,7 @@ def seraApiTodocEmbbed(query:str, documentEmbedder: SentenceTransformersDocument
     "api_key": api_key
   }
 
-  #Commented out to save api requests
+  
   response = requests.get(url, params = params)
   file = open('serapiResponce.json','w')
   file.write(response.text)
@@ -39,6 +40,7 @@ def seraApiTodocEmbbed(query:str, documentEmbedder: SentenceTransformersDocument
   #Json to haystack document converter
   #Haystack required steps for conversions
   """*****************************JSONCONVERTER STUFF*****************************"""
+  #info var from https request
   #info = ByteStream.from_string(json.dumps(response.json()))
   
   
