@@ -4,7 +4,6 @@ import os
 # Create a text file in the same folder and paste your Gemini API key in it
 # Get a free Gemini API key at https://aistudio.google.com/app/apikey
 GEMINI_API_KEY_FILE_PATH = "llm/gemini_api_key.txt"
-MAX_SEARCH_TERMS = 3
 
 with open(GEMINI_API_KEY_FILE_PATH, 'r') as file:
 	api_key = file.readline()
@@ -22,5 +21,5 @@ def generate_search_terms(user_query: str, num_search_terms: int) -> list[str]:
 	prompt = "You are a research assistant. Generate the %s best search queries that can be used to retrieve scholarly articles that can help the user research the following topic: \n %s\n Respond with only the search terms separated by newlines." % (str(num_search_terms), user_query)
 	response = generate(prompt, 0)
 	search_queries = response.text.replace("\"","").split("\n")
-	search_queries = search_queries[:MAX_SEARCH_TERMS]
+	search_queries = search_queries[:num_search_terms]
 	return search_queries
