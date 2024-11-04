@@ -1,4 +1,3 @@
-from prototype import gemini_generate_search_terms as gen
 #from prototype import google_scholar_search as search
 from Application import app
 
@@ -8,7 +7,7 @@ from Application import app
 # We will replace the Gemini API with a local model and the Serpapi API with a database + search model
 
 
-UI = app.Interface(True)
+UI = app.Interface(False)
 UI.run()
 
 """user_query = input("Search: ")

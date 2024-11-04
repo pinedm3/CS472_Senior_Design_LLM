@@ -2,10 +2,7 @@ import gradio as gr
 from gradio import ChatMessage
 from gradio import Chatbot
 import random as rd
-from retriever import do_search
-from prototype import gemini_generate_search_terms as gen
-from prototype import google_scholar_search as gs
-
+from retriever.retriever import do_embedding_based_search
 
 class Interface:
     def __init__(self, isTest=False):
@@ -19,31 +16,33 @@ class Interface:
 
     def output(self, message, history):
         history.append(ChatMessage(role="user", content=message))
-        articles = do_search(message)
-        results = []
+        results = do_embedding_based_search(message)
 
-        for a in articles:
-            results.append(a["title"])
-
-        return f"Your search results are: {results}"
-
-    def outputTest(self, message, history):
-        history.append(ChatMessage(role="user", content=message))
-        generated_search_terms = gen.generate_search_terms(message)
-
-        all_results= []
-        for term in generated_search_terms:
-            for result in gs.do_search(term)[:4]:
-                all_results.append(result)
-        
         output_string: str = ""
         index = 1
-        for result in all_results:
+        for result in results:
             output_string += str(index) + ". %s\n %s\n" % (result["title"], result["link"])
-
-
+            index += 1
 
         return output_string
+
+    # def outputTest(self, message, history):
+    #     history.append(ChatMessage(role="user", content=message))
+    #     generated_search_terms = gen.generate_search_terms(message)
+
+    #     all_results= []
+    #     for term in generated_search_terms:
+    #         for result in gs.do_search(term)[:4]:
+    #             all_results.append(result)
+        
+    #     output_string: str = ""
+    #     index = 1
+    #     for result in all_results:
+    #         output_string += str(index) + ". %s\n %s\n" % (result["title"], result["link"])
+
+
+
+    #     return output_string
 
     def run(self):
         self.demo.launch()
