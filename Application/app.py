@@ -21,7 +21,8 @@ class Interface:
         output_string: str = ""
         index = 1
         for result in results:
-            output_string += str(index) + ". %s\n %s\n" % (result["title"], result["link"])
+            percent_score = round(result["score"] * 100, 2)
+            output_string += str(index) + ". %s (%s relevance)\n %s\n" % (result["title"], str(percent_score) + "%", result["link"])
             index += 1
 
         return output_string

@@ -45,7 +45,7 @@ def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per
 
     query_pipeline = Pipeline()
     query_pipeline.add_component("text_embedder", text_embedder)
-    query_pipeline.add_component("retriever", InMemoryEmbeddingRetriever(document_store=document_store))
+    query_pipeline.add_component("retriever", InMemoryEmbeddingRetriever(document_store=document_store, scale_score=True))
     query_pipeline.connect("text_embedder.embedding", "retriever.query_embedding")
 
     print("Indexing articles...")
@@ -56,7 +56,9 @@ def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per
 
     article_results = []
     for r in result['retriever']['documents']:
-        article_results.append(r.meta)
+        article = r.meta
+        article["score"] = r.score
+        article_results.append(article)
     return article_results
 
 # Example usage
