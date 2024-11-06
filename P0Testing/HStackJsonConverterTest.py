@@ -8,9 +8,6 @@ from haystack.components.retrievers import InMemoryEmbeddingRetriever
 from P0Testing.seraApiTodocEmbbed import gScholarSearch
 
 
-
-
-    
 #Json to haystack document converter
 	#Haystack required steps for conversions
 #info = ByteStream.from_string(json.dumps(textResponce))
@@ -18,29 +15,28 @@ from P0Testing.seraApiTodocEmbbed import gScholarSearch
 #converterResults = converter.run(sources=[info])
 
 #Converter results grabing only haystack document
-documents = gScholarSearch(query)
+# documents = gScholarSearch(query)
 
-#Document embedder setup
-docStore = InMemoryDocumentStore(embedding_similarity_function="cosine")
-docEmbedder = SentenceTransformersDocumentEmbedder(model="intfloat/e5-large-v2", prefix="passage", meta_fields_to_embed={"link","publication","position"}) #Embbeds document
-docEmbedder.warm_up()
-docEmbbed = docEmbedder.run(documents)["documents"]
-docStore.write_documents(docEmbbed)
+# #Document embedder setup
+# docStore = InMemoryDocumentStore(embedding_similarity_function="cosine")
+# docEmbedder = SentenceTransformersDocumentEmbedder(model="intfloat/e5-large-v2", prefix="passage", meta_fields_to_embed={"link","publication","position"}) #Embbeds document
+# docEmbedder.warm_up()
+# docEmbbed = docEmbedder.run(documents)["documents"]
+# docStore.write_documents(docEmbbed)
 
 
-#Retreiver pipleline
-docPrepPipeLine = Pipeline()
-docPrepPipeLine.add_component("text_embedder", SentenceTransformersTextEmbedder(model="intfloat/e5-large-v2", prefix="passage")) #embbeds query text
-docPrepPipeLine.add_component("retriever", InMemoryEmbeddingRetriever(document_store=docStore))
-docPrepPipeLine.connect("text_embedder.embedding", "retriever.query_embedding")
+# #Retreiver pipleline
+# docPrepPipeLine = Pipeline()
+# docPrepPipeLine.add_component("text_embedder", SentenceTransformersTextEmbedder(model="intfloat/e5-large-v2", prefix="passage")) #embbeds query text
+# docPrepPipeLine.add_component("retriever", InMemoryEmbeddingRetriever(document_store=docStore))
+# docPrepPipeLine.connect("text_embedder.embedding", "retriever.query_embedding")
 
-#Test query
-query = "Automated Malware Analysis"
-result = docPrepPipeLine.run({"text_embedder": {"text": query}})
+# #Test query
+# query = "Automated Malware Analysis"
+# result = docPrepPipeLine.run({"text_embedder": {"text": query}})
 
-#Prints out 0th result of retriever stored as document
-print(result['retriever']['documents'][0])
-
+# #Prints out 0th result of retriever stored as document
+# print(result['retriever']['documents'][0])
 
 #Text file representation of document contents
 

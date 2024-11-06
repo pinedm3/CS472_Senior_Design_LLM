@@ -71,7 +71,6 @@ TODO: Either have pchecker query go to new scholar component. Which then will do
 """*****************************checker*****************************"""
 
 promptBuilder = PromptBuilder(template=searchPrompt)
-
 regularPipe = Pipeline()
 regularPipe.add_component("promptChecker",PromptCheckers())
 regularPipe.add_component("promptBuilder",promptBuilder)
@@ -98,7 +97,7 @@ while True:
     
     queryType = PromptCheckers.typeOfQuery(prompt)
     #oneshot classifer detects whether search
-    if  queryType == 'search':
+    if  queryType["labels"][0] == 'search':
         print("Query is of search type")
         docStore.write_documents(seraApiTodocEmbbed(prompt,docEmbedder),policy='DuplicatePolicy.SKIP') #function call to to scholar search and return doc embedd     
     #Summary is just fallhback for now
@@ -109,7 +108,7 @@ while True:
     regResult = regularPipe.run(data={"promptBuilder":  {"template_variables": {"memory":memory, "documents": ChatbotDocumentOutput}} #memory passed to sysMsh memory
                         ,"promptChecker": {"query" : prompt} #var prompt passed to essayChecker query
                         }) 
-    ChatbotOutput = print(regResult['model']['replies'][0]) #Model Reply byitself
+    ChatbotOutput = regResult['model']['replies'][0] #Model Reply byitself
     counter+= 1
     
     #basic memory implementation
