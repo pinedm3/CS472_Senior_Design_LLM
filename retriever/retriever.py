@@ -45,7 +45,7 @@ def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per
 
     query_pipeline = Pipeline()
     query_pipeline.add_component("text_embedder", text_embedder)
-    query_pipeline.add_component("retriever", InMemoryEmbeddingRetriever(document_store=document_store, scale_score=True))
+    query_pipeline.add_component("retriever", InMemoryEmbeddingRetriever(document_store=document_store, scale_score=True, top_k=num_search_terms*results_per_search))
     query_pipeline.connect("text_embedder.embedding", "retriever.query_embedding")
 
     print("Indexing articles...")

@@ -16,8 +16,7 @@ class Interface:
 
     def output(self, message, history):
         history.append(ChatMessage(role="user", content=message))
-        results = do_embedding_based_search(message)
-
+        results = do_embedding_based_search(message)[:10]
         output_string: str = ""
         index = 1
         for result in results:
