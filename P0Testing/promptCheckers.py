@@ -4,7 +4,8 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification, pipe
 from statistics import fmean
 import torch
 import sys
-@component
+
+@component    
 class PromptCheckers:   
     #Returns output to either use output["lables"][i] and/or output[""]
     def typeOfQuery(query:str) -> str:
@@ -16,12 +17,12 @@ class PromptCheckers:
         print(output)
         return output
 
-    
+#@component.output_types(query=str)
     """
     Prevent user from trying to write an essay or prompt inject
+    Returns either "PromptInjection" or "PromptEssay"
     """
-    @component.output_types(query=str)
-    def run(self, query:str):
+    def illegalPromptChecker(query:str) -> str:
         prompt = query    
         # Two lists of sentences
         injectTokenizer = AutoTokenizer.from_pretrained("ProtectAI/deberta-v3-base-prompt-injection")
@@ -59,9 +60,9 @@ class PromptCheckers:
         # Compute embeddings for both lists
         #embeddings2 = essayModel.encode(sentences2)
         
-        while True:
-            if(prompt == -1):
-                sys.exit()
+        # while True:
+        #     if(prompt == -1):
+        #         sys.exit()
             # embeddings1 = essayModel.encode(prompt)
             # # Compute cosine similarities
             # similarities = essayModel.similarity(embeddings1, embeddings2)
@@ -69,18 +70,20 @@ class PromptCheckers:
             # avg = fmean(similarities.data[0])
             # print(avg)
             # if(avg > .40):`
-            if(PromptCheckers.typeOfQuery(prompt)["labels"][0] == 'essay'):
-                print("Detected trying to write essay\n prompt again: ")
-                prompt = input()
-                continue
+        if(PromptCheckers.typeOfQuery(prompt)["labels"][0] == 'essay'):
+            print("Detected trying to write essay!")
+            return "PromptEssay"
+#prompt = input()
+#continue
             """*****************************promptInjector*****************************"""   
 
-            result = classifier(prompt)
-            label = result[0]['label']
-            print(label)
-            if(label == "INJECTION"):
-                print("illegal prompt deteted.\nReprompt: ")
-                prompt = input()
-                continue
-            
-            return {"query": prompt}          
+        result = classifier(prompt)
+        label = result[0]['label']
+        print(label)
+        if(label == "INJECTION"):
+            print("illegal prompt deteted.\nReprompt: ")
+            return "PromptInjection"
+        #prompt = input()
+        #continue
+
+#return {"query": prompt}          
