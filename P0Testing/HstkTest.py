@@ -1,15 +1,15 @@
-from typing import List
 from haystack import Pipeline
 from haystack.components.generators import HuggingFaceLocalGenerator
 from haystack.components.builders.prompt_builder import PromptBuilder
-from promptCheckers import PromptCheckers
+from promptCheckers import typeOfQuery, illegalPromptChecker
 from seraApiTodocEmbbed import seraApiTodocEmbbed
 from haystack.document_stores.in_memory import InMemoryDocumentStore
 from haystack.components.embedders import SentenceTransformersTextEmbedder, SentenceTransformersDocumentEmbedder
 from haystack.components.retrievers import InMemoryEmbeddingRetriever
 #Also prints full 'result' info
 #instead of just model reply
-debug = False
+
+#debug = False
 
 """*****************************promptMessages*****************************"""
 sysMsg = """
@@ -72,14 +72,14 @@ TODO: Either have pchecker query go to new scholar component. Which then will do
 
 promptBuilder = PromptBuilder(template=searchPrompt)
 regularPipe = Pipeline()
-regularPipe.add_component("promptChecker",PromptCheckers())
+#regularPipe.add_component("promptChecker",PromptCheckers())
 regularPipe.add_component("promptBuilder",promptBuilder)
 regularPipe.add_component("model",model)
 #Scholar api connections
 
 #var query passed to var question
 
-regularPipe.connect("promptChecker.query", "promptBuilder.question")
+#regularPipe.connect("promptChecker.query", "promptBuilder.question")
 regularPipe.connect("promptBuilder.prompt","model.prompt") #prompt passed to model
 regularPipe.draw(path="./PipeLineImage.jpg")
 
@@ -88,6 +88,7 @@ counter = 0
 #******************************************************************************
 ChatbotOutput = ""
 #Basic Prompt loop
+
 while True:
     print("Enter prompt(-1 to exit): ")
     prompt = input()
@@ -95,7 +96,19 @@ while True:
     if prompt == "-1":
         break
     
-    queryType = PromptCheckers.typeOfQuery(prompt)
+    illegalPromptCheck = illegalPromptChecker(prompt)
+    
+    match illegalPromptCheck:
+        case "PROMPTINJECTION":
+            print("Prompt Injection detected reprompt")
+            continue
+        case "PROMPTESSAY":
+            print("Essay Writing detected!")
+            continue
+        case "CLEAN":
+            print("Clean Prompt")
+        
+    queryType = typeOfQuery(prompt)
     #oneshot classifer detects whether search
     if  queryType["labels"][0] == 'search':
         print("Query is of search type")
@@ -105,8 +118,7 @@ while True:
         print("Query is of other type")
     searchResult = docPrepPipeLine.run({"textEmbedder" : {"text" : prompt}})
     ChatbotDocumentOutput = searchResult['retriever']['documents']
-    regResult = regularPipe.run(data={"promptBuilder":  {"template_variables": {"memory":memory, "documents": ChatbotDocumentOutput}} #memory passed to sysMsh memory
-                        ,"promptChecker": {"query" : prompt} #var prompt passed to essayChecker query
+    regResult = regularPipe.run(data={"promptBuilder":  {"template_variables": {"memory":memory, "documents": ChatbotDocumentOutput, "question": prompt}} #memory passed to sysMsh memory
                         }) 
     ChatbotOutput = regResult['model']['replies'][0] #Model Reply byitself
     counter+= 1
