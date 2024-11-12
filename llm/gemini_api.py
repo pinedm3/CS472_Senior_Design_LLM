@@ -1,5 +1,5 @@
 import google.generativeai as genai
-import os
+from google.generativeai.types import HarmCategory, HarmBlockThreshold
 
 # Create a text file in the same folder and paste your Gemini API key in it
 # Get a free Gemini API key at https://aistudio.google.com/app/apikey
@@ -14,7 +14,14 @@ with open(GEMINI_API_KEY_FILE_PATH, 'r') as file:
 def generate(prompt: str, temperature: float = 1.0) -> str:
 	genai.configure(api_key=api_key)
 	model = genai.GenerativeModel("gemini-1.5-flash")
-	return model.generate_content(prompt, generation_config=genai.types.GenerationConfig(temperature=temperature))
+	safety_settings={
+        HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+        HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+		HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+		HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+    }
+	return model.generate_content(prompt, generation_config=genai.types.GenerationConfig(temperature=temperature), safety_settings=safety_settings)
+
 
 # Generates search terms given a user query, uses 0 temperature to be deterministic
 def generate_search_terms(user_query: str, num_search_terms: int) -> list[str]:
