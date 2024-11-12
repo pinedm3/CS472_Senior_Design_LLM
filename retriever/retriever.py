@@ -9,7 +9,8 @@ from haystack import Pipeline
 from haystack.components.embedders import SentenceTransformersTextEmbedder, SentenceTransformersDocumentEmbedder
 from haystack.components.writers import DocumentWriter
 from sentence_transformers import SentenceTransformer
-from database.arxiv_api import get_articles
+from database.arxiv_api import get_arxiv_articles
+from database.pubmed_api import get_pubmed_articles, instantiate_pubmed_object
 from llm.gemini_api import generate_search_terms
 
 
@@ -29,10 +30,18 @@ def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per
 
     # The articles will be retrieved in dictionary format (see database.py)
     # The embeddings will only be generated from Title and Abstract, the rest of the fields will be metadata
-    for term in search_terms:
-        for article in get_articles(term, results_per_search):
-            documents_dict[article["title"]] = Document(content="Title:%s\nAbstract:%s" % (article["title"], article["abstract"]), meta=article)
-    
+    # Hacky method to select what database to search for testing purposes
+    database = 1
+    if database == 1:
+        for term in search_terms:
+            for article in get_arxiv_articles(term, results_per_search):
+                documents_dict[article["title"]] = Document(content="Title:%s\nAbstract:%s" % (article["title"], article["abstract"]), meta=article)
+
+    elif database == 2:
+        pubmed_conn = instantiate_pubmed_object("AI Article Search Tool")
+        for term in search_terms:
+            for article in get_pubmed_articles(pubmed_conn, term, results_per_search):
+                documents_dict[article["title"]] = Document(content="Title:%s\nAbstract:%s" % (article["title"], article["abstract"]), meta=article)
     # This model can be replaced with the path to Tyler's SBERT model when it's ready
     model = "BAAI/bge-small-en-v1.5"
     document_embedder = SentenceTransformersDocumentEmbedder(model=model)

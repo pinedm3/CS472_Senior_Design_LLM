@@ -1,6 +1,6 @@
 import arxiv
 
-def get_articles(query: str, max_results: int) -> list[dict]:
+def get_arxiv_articles(query: str, max_results: int) -> list[dict]:
 	client = arxiv.Client()
 	search = arxiv.Search(
 		query = query,
