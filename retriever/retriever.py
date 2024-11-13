@@ -14,7 +14,7 @@ from database.pubmed_api import get_pubmed_articles, instantiate_pubmed_object
 from llm.gemini_api import generate_search_terms
 
 
-def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per_search: int = 25) -> list[dict]:
+def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per_search: int = 25) -> dict:
     # Generate search terms
     print("Generating search terms...")
     search_terms: list[str] = generate_search_terms(query, num_search_terms)
@@ -26,6 +26,7 @@ def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per
 
     # Store documents in a dictionary to prevent duplicates
     documents_dict = {}
+    docList = []
     print("Getting articles...")
 
     # The articles will be retrieved in dictionary format (see database.py)
@@ -35,13 +36,14 @@ def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per
     if database == 1:
         for term in search_terms:
             for article in get_arxiv_articles(term, results_per_search):
-                documents_dict[article["title"]] = Document(content="Title:%s\nAbstract:%s" % (article["title"], article["abstract"]), meta=article)
+                #documents_dict[article["title"]] = Document(content="Title:%s\nAbstract:%s" % (article["title"], article["abstract"]), meta=article)
+                docList.append(Document(content=article["abstract"], meta={"title": article["title"],"link": article["link"]}))
 
     elif database == 2:
         pubmed_conn = instantiate_pubmed_object("AI Article Search Tool")
         for term in search_terms:
             for article in get_pubmed_articles(pubmed_conn, term, results_per_search):
-                documents_dict[article["title"]] = Document(content="Title:%s\nAbstract:%s" % (article["title"], article["abstract"]), meta=article)
+                docList.append(Document(content=article["abstract"], meta={"title": article["title"],"link": article["link"]}))
     # This model can be replaced with the path to Tyler's SBERT model when it's ready
     model = "BAAI/bge-small-en-v1.5"
     document_embedder = SentenceTransformersDocumentEmbedder(model=model)
@@ -49,7 +51,7 @@ def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per
 
     indexing_pipeline = Pipeline()
     indexing_pipeline.add_component("embedder", document_embedder)
-    indexing_pipeline.add_component("writer", DocumentWriter(document_store=document_store))
+    indexing_pipeline.add_component("writer", DocumentWriter(document_store=document_store,policy='DuplicatePolicy.SKIP'))
     indexing_pipeline.connect("embedder", "writer")
 
     query_pipeline = Pipeline()
@@ -58,17 +60,13 @@ def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per
     query_pipeline.connect("text_embedder.embedding", "retriever.query_embedding")
 
     print("Indexing articles...")
-    indexing_pipeline.run({"documents": list(documents_dict.values())})
+    #ndexing_pipeline.run({"documents": list(documents_dict.values())})
+    indexing_pipeline.run({"documents": docList})
 
     print("Searching for articles...")
     result = query_pipeline.run({"text_embedder":{"text": query}})
 
-    article_results = []
-    for r in result['retriever']['documents']:
-        article = r.meta
-        article["score"] = r.score
-        article_results.append(article)
-    return article_results
+    return result['retriever']['documents']
 
 # Example usage
 # from retriever import do_search
