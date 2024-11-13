@@ -1,7 +1,14 @@
 import arxiv
+from arxiv import Client
+
+client: Client = None
+
 
 def get_arxiv_articles(query: str, max_results: int) -> list[dict]:
-	client = arxiv.Client()
+	global client
+	if client is None:
+		client = arxiv.Client()
+
 	search = arxiv.Search(
 		query = query,
 		max_results = max_results,

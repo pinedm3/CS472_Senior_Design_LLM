@@ -10,7 +10,7 @@ from haystack.components.embedders import SentenceTransformersTextEmbedder, Sent
 from haystack.components.writers import DocumentWriter
 from sentence_transformers import SentenceTransformer
 from database.arxiv_api import get_arxiv_articles
-from database.pubmed_api import get_pubmed_articles, instantiate_pubmed_object
+from database.pubmed_api import get_pubmed_articles
 from llm.gemini_api import generate_search_terms
 
 
@@ -40,9 +40,8 @@ def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per
                 docList.append(Document(content=article["abstract"], meta={"title": article["title"],"link": article["link"]}))
 
     elif database == 2:
-        pubmed_conn = instantiate_pubmed_object("AI Article Search Tool")
         for term in search_terms:
-            for article in get_pubmed_articles(pubmed_conn, term, results_per_search):
+            for article in get_pubmed_articles(term, results_per_search):
                 docList.append(Document(content=article["abstract"], meta={"title": article["title"],"link": article["link"]}))
     # This model can be replaced with the path to Tyler's SBERT model when it's ready
     model = "BAAI/bge-small-en-v1.5"
