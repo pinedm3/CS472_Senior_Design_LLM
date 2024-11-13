@@ -1,5 +1,6 @@
 import google.generativeai as genai
-from google.generativeai.types import HarmCategory, HarmBlockThreshold
+from google.generativeai.types import HarmCategory, HarmBlockThreshold, GenerateContentResponse
+
 
 # Create a text file in the same folder and paste your Gemini API key in it
 # Get a free Gemini API key at https://aistudio.google.com/app/apikey
@@ -11,7 +12,7 @@ with open(GEMINI_API_KEY_FILE_PATH, 'r') as file:
 
 # Generates content using Gemini given a prompt
 # Lower temperature = more predictable, Higher temperature = more creative
-def generate(prompt: str, temperature: float = 1.0) -> str:
+def generate(prompt: str, temperature: float = 1.0) -> GenerateContentResponse:
 	genai.configure(api_key=api_key)
 	model = genai.GenerativeModel("gemini-1.5-flash")
 	safety_settings={
