@@ -1,4 +1,3 @@
-import pymed
 from pymed import PubMed
 
 def instantiate_pubmed_object(toolname: str = None, email: str = None) -> PubMed:
@@ -10,10 +9,12 @@ def get_pubmed_articles(pubmed, query: str, max_results: int) -> list[dict]:
 
     list_results = []
     for article in list(result):
+        links = article.pubmed_id.split()
         dict = {
             "title": article.title,
             "abstract": article.abstract,
-            "link": article.pubmed_id
+            "link": 'https://pubmed.ncbi.nlm.nih.gov/' + links[0],
+            "full_link_list": links
         }
         list_results.append(dict)
     return list_results
