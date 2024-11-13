@@ -1,6 +1,6 @@
 # !pip install haystack-ai
 # !pip install sentence-transformers>=3.0.0
-
+from torch.cuda import is_available as is_cuda_available
 from haystack.document_stores.in_memory import InMemoryDocumentStore
 from haystack.components.retrievers import InMemoryEmbeddingRetriever
 from haystack import Document
@@ -8,6 +8,7 @@ from haystack import Pipeline
 
 from haystack.components.embedders import SentenceTransformersTextEmbedder, SentenceTransformersDocumentEmbedder
 from haystack.components.writers import DocumentWriter
+from haystack.utils import ComponentDevice, Device
 from sentence_transformers import SentenceTransformer
 from database.arxiv_api import get_arxiv_articles
 from database.pubmed_api import get_pubmed_articles
@@ -43,10 +44,16 @@ def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per
         for term in search_terms:
             for article in get_pubmed_articles(term, results_per_search):
                 docList.append(Document(content=article["abstract"], meta={"title": article["title"],"link": article["link"]}))
-    # This model can be replaced with the path to Tyler's SBERT model when it's ready
+
     model = "BAAI/bge-small-en-v1.5"
-    document_embedder = SentenceTransformersDocumentEmbedder(model=model)
-    text_embedder = SentenceTransformersTextEmbedder(model=model)
+
+    # Use GPU if available
+    device = ComponentDevice.from_single(Device.cpu())
+    if is_cuda_available():
+        device = ComponentDevice.from_single(Device.gpu(id=0))
+    
+    document_embedder = SentenceTransformersDocumentEmbedder(model=model, device=device)
+    text_embedder = SentenceTransformersTextEmbedder(model=model, device=device)
 
     indexing_pipeline = Pipeline()
     indexing_pipeline.add_component("embedder", document_embedder)
