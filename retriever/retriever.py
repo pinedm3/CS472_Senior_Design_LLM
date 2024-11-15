@@ -1,6 +1,6 @@
 # !pip install haystack-ai
 # !pip install sentence-transformers>=3.0.0
-
+from torch.cuda import is_available as is_cuda_available
 from haystack.document_stores.in_memory import InMemoryDocumentStore
 from haystack.components.retrievers import InMemoryEmbeddingRetriever
 from haystack import Document
@@ -8,13 +8,14 @@ from haystack import Pipeline
 
 from haystack.components.embedders import SentenceTransformersTextEmbedder, SentenceTransformersDocumentEmbedder
 from haystack.components.writers import DocumentWriter
+from haystack.utils import ComponentDevice, Device
 from sentence_transformers import SentenceTransformer
 from database.arxiv_api import get_arxiv_articles
-from database.pubmed_api import get_pubmed_articles, instantiate_pubmed_object
+from database.pubmed_api import get_pubmed_articles
 from llm.gemini_api import generate_search_terms
 
 
-def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per_search: int = 25) -> dict:
+def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per_search: int = 25, database: str = "arxiv") -> list:
     # Generate search terms
     print("Generating search terms...")
     search_terms: list[str] = generate_search_terms(query, num_search_terms)
@@ -30,24 +31,26 @@ def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per
     print("Getting articles...")
 
     # The articles will be retrieved in dictionary format (see database.py)
-    # The embeddings will only be generated from Title and Abstract, the rest of the fields will be metadata
-    # Hacky method to select what database to search for testing purposes
-    database = 1
-    if database == 1:
-        for term in search_terms:
+    # The embeddings will only be generated from Title and Abstract, the rest of the fields will be metadata    for term in search_terms:
+    for term in search_terms:
+        if database == "arxiv":
             for article in get_arxiv_articles(term, results_per_search):
-                #documents_dict[article["title"]] = Document(content="Title:%s\nAbstract:%s" % (article["title"], article["abstract"]), meta=article)
                 docList.append(Document(content=article["abstract"], meta={"title": article["title"],"link": article["link"]}))
-
-    elif database == 2:
-        pubmed_conn = instantiate_pubmed_object("AI Article Search Tool")
-        for term in search_terms:
-            for article in get_pubmed_articles(pubmed_conn, term, results_per_search):
+        elif database == "pubmed":
+            for article in get_pubmed_articles(term, results_per_search):
                 docList.append(Document(content=article["abstract"], meta={"title": article["title"],"link": article["link"]}))
-    # This model can be replaced with the path to Tyler's SBERT model when it's ready
+        else:
+            raise Exception("Invalid database %s" % database)
+    
     model = "BAAI/bge-small-en-v1.5"
-    document_embedder = SentenceTransformersDocumentEmbedder(model=model)
-    text_embedder = SentenceTransformersTextEmbedder(model=model)
+
+    # Use GPU if available
+    device = ComponentDevice.from_single(Device.cpu())
+    if is_cuda_available():
+        device = ComponentDevice.from_single(Device.gpu(id=0))
+    
+    document_embedder = SentenceTransformersDocumentEmbedder(model=model, device=device)
+    text_embedder = SentenceTransformersTextEmbedder(model=model, device=device)
 
     indexing_pipeline = Pipeline()
     indexing_pipeline.add_component("embedder", document_embedder)
@@ -60,7 +63,6 @@ def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per
     query_pipeline.connect("text_embedder.embedding", "retriever.query_embedding")
 
     print("Indexing articles...")
-    #ndexing_pipeline.run({"documents": list(documents_dict.values())})
     indexing_pipeline.run({"documents": docList})
 
     print("Searching for articles...")
