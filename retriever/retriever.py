@@ -42,7 +42,7 @@ def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per
         else:
             raise Exception("Invalid database %s" % database)
     
-    model = "sentence-transformers/msmarco-distilbert-base-v4"
+    model = "BAAI/bge-small-en-v1.5"
 
     # Use GPU if available
     device = ComponentDevice.from_single(Device.cpu())
