@@ -32,15 +32,16 @@ def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per
 
     # The articles will be retrieved in dictionary format (see database.py)
     # The embeddings will only be generated from Title and Abstract, the rest of the fields will be metadata    for term in search_terms:
-    for term in search_terms:
-        if database == "arxiv":
+    if database == "arxiv":
+        for term in search_terms:
             for article in get_arxiv_articles(term, results_per_search):
                 docList.append(Document(content=article["abstract"], meta={"title": article["title"],"link": article["link"]}))
-        elif database == "pubmed":
+    elif database == "pubmed":
+        for term in search_terms:
             for article in get_pubmed_articles(term, results_per_search):
                 docList.append(Document(content=article["abstract"], meta={"title": article["title"],"link": article["link"]}))
-        else:
-            raise Exception("Invalid database %s" % database)
+    else:
+        raise Exception("Invalid database %s" % database)
     
     model = "BAAI/bge-small-en-v1.5"
 
