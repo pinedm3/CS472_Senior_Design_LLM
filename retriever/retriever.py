@@ -15,7 +15,7 @@ from database.pubmed_api import get_pubmed_articles
 from llm.gemini_api import generate_search_terms
 import asyncio
 import time 
-async def searchArticles(term : str, database: str, resultsPerSearch: int):
+async def dataBaseSelection(term : str, database: str, resultsPerSearch: int):
     articles = None
     docData = []
     #Data base selection:
@@ -31,7 +31,18 @@ async def searchArticles(term : str, database: str, resultsPerSearch: int):
         docData.append(Document(content=article["abstract"], meta={"title": article["title"],"link": article["link"]}))
     return docData
 
-async def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per_search: int = 25, database: str = "arxiv") -> list:
+async def articleSearchTasks(search_terms,database,results_per_search) -> list:
+    coros = []
+    print("Getting articles...")
+    for term in search_terms:
+        coros.append(dataBaseSelection(term,database,results_per_search))
+        print(term)
+    asycRecs = asyncio.gather(*coros)
+    await asycRecs
+    return asycRecs
+
+def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per_search: int = 25, database: str = "arxiv") -> list:
+    
     # Generate search terms
     print("Generating search terms...")
         #Not sure if await matter
@@ -40,15 +51,19 @@ async def do_embedding_based_search(query: str, num_search_terms: int = 5, resul
     t1 = time.time()
     print("Took: %f. \nSearch terms generated:" % (t1-t0))
     #ASYNCIO STuFF
-    coros = []
-    for term in search_terms:
-        coros.append(searchArticles(term,database,results_per_search))
-        print(term)
-    asycRecs = asyncio.gather(*coros)
-    print("Getting articles...")
-
-    # Store documents
     docList = []
+
+    
+    #await asycRecs
+    t0 = time.time()
+    asycRecs = asyncio.run(articleSearchTasks(search_terms,database,results_per_search))
+    for indivList in asycRecs._result:
+        docList+= indivList        
+    t1 = time.time()
+    print("asycResults took: ", t1-t0)
+    
+    # Store documents
+    
     document_store = InMemoryDocumentStore(embedding_similarity_function="cosine")
     # The articles will be retrieved in dictionary format (see database.py)
     # The embeddings will only be generated from Title and Abstract, the rest of the fields will be metadata    for term in search_terms:
@@ -84,13 +99,7 @@ async def do_embedding_based_search(query: str, num_search_terms: int = 5, resul
     query_pipeline.connect("text_embedder.embedding", "retriever.query_embedding")
 
     
-        #before actually needed
-    t0 = time.time()
-    await asycRecs
-    for indivList in asycRecs._result:
-        docList+= indivList        
-    t1 = time.time()
-    print("asycResults took: ", t1-t0)
+    #before actually needed
     print("Indexing articles...")
     indexing_pipeline.run({"documents": docList})
     print("Searching for articles...")
