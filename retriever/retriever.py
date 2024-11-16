@@ -14,7 +14,7 @@ from database.arxiv_api import get_arxiv_articles
 from database.pubmed_api import get_pubmed_articles
 from llm.gemini_api import generate_search_terms
 import asyncio
-
+import time 
 async def searchArticles(term : str, database: str, resultsPerSearch: int):
     articles = None
     docData = []
@@ -34,22 +34,23 @@ async def searchArticles(term : str, database: str, resultsPerSearch: int):
 async def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per_search: int = 25, database: str = "arxiv") -> list:
     # Generate search terms
     print("Generating search terms...")
-    search_terms: list[str] = generate_search_terms(query, num_search_terms)
-    print("Search terms generated:")
+        #Not sure if await matter
+    t0 = time.time()
+    search_terms: await list[str] = generate_search_terms(query, num_search_terms)
+    t1 = time.time()
+    print("Took: %f. \nSearch terms generated:" % (t1-t0))
+    coros = []
     for term in search_terms:
+        coros.append(searchArticles(term,database,results_per_search))
         print(term)
-
+    print("Getting articles...")
+    t0 = time.time()
+    asycRecs = asyncio.gather(*coros)
     document_store = InMemoryDocumentStore(embedding_similarity_function="cosine")
 
-    # Store documents in a dictionary to prevent duplicates
-    
+    # Store documents
     docList = []
-    print("Getting articles...")
-   
-    coros = [searchArticles(term,database,results_per_search) for term in search_terms]
-    asycRecs= await asyncio.gather(*coros)
-    for indivList in asycRecs:
-        docList.extend(indivList)
+    
     # The articles will be retrieved in dictionary format (see database.py)
     # The embeddings will only be generated from Title and Abstract, the rest of the fields will be metadata    for term in search_terms:
     
@@ -84,6 +85,12 @@ async def do_embedding_based_search(query: str, num_search_terms: int = 5, resul
     query_pipeline.connect("text_embedder.embedding", "retriever.query_embedding")
 
     print("Indexing articles...")
+        #before actually needed
+    await asycRecs
+    t1 = time.time()
+    print("asycResults took: ", t1-t0)
+    for indivList in asycRecs._result:
+        docList+= indivList
     indexing_pipeline.run({"documents": docList})
 
     print("Searching for articles...")
