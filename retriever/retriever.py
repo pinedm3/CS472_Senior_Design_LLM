@@ -13,9 +13,25 @@ from sentence_transformers import SentenceTransformer
 from database.arxiv_api import get_arxiv_articles
 from database.pubmed_api import get_pubmed_articles
 from llm.gemini_api import generate_search_terms
+import asyncio
 
+async def searchArticles(term : str, database: str, resultsPerSearch: int):
+    articles = None
+    docData = []
+    #Data base selection:
+    match database:
+        case "arxiv":
+             articles = get_arxiv_articles(term, resultsPerSearch)
+        case "pubmed":
+             articles = get_pubmed_articles(term, resultsPerSearch)
+        case _:
+            raise Exception("Invalid database %s" % database)
+                    
+    for article in articles:
+        docData.append(Document(content=article["abstract"], meta={"title": article["title"],"link": article["link"]}))
+    return docData
 
-def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per_search: int = 25, database: str = "arxiv") -> list:
+async def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per_search: int = 25, database: str = "arxiv") -> list:
     # Generate search terms
     print("Generating search terms...")
     search_terms: list[str] = generate_search_terms(query, num_search_terms)
@@ -26,21 +42,26 @@ def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per
     document_store = InMemoryDocumentStore(embedding_similarity_function="cosine")
 
     # Store documents in a dictionary to prevent duplicates
-    documents_dict = {}
+    
     docList = []
     print("Getting articles...")
-
+   
+    coros = [searchArticles(term,database,results_per_search) for term in search_terms]
+    asycRecs= await asyncio.gather(*coros)
+    for indivList in asycRecs:
+        docList.extend(indivList)
     # The articles will be retrieved in dictionary format (see database.py)
     # The embeddings will only be generated from Title and Abstract, the rest of the fields will be metadata    for term in search_terms:
-    for term in search_terms:
-        if database == "arxiv":
-            for article in get_arxiv_articles(term, results_per_search):
-                docList.append(Document(content=article["abstract"], meta={"title": article["title"],"link": article["link"]}))
-        elif database == "pubmed":
-            for article in get_pubmed_articles(term, results_per_search):
-                docList.append(Document(content=article["abstract"], meta={"title": article["title"],"link": article["link"]}))
-        else:
-            raise Exception("Invalid database %s" % database)
+    
+    # for term in search_terms:
+    #     if database == "arxiv":
+    #         for article in get_arxiv_articles(term, results_per_search):
+    #             docList.append(Document(content=article["abstract"], meta={"title": article["title"],"link": article["link"]}))
+    #     elif database == "pubmed":
+    #         for article in get_pubmed_articles(term, results_per_search):
+    #             docList.append(Document(content=article["abstract"], meta={"title": article["title"],"link": article["link"]}))
+    #     else:
+    #         raise Exception("Invalid database %s" % database)
     
     model = "BAAI/bge-small-en-v1.5"
 

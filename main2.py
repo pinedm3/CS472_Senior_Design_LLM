@@ -1,5 +1,6 @@
 from retriever.retriever import do_embedding_based_search
 import gradio as gr
+import asyncio
 
 
 
@@ -11,7 +12,8 @@ def pre_search(prev_btn, next_btn, results):
 	return prev_btn, next_btn, results
 
 def do_search(query: str, database: str):
-	results = do_embedding_based_search(query)
+	results = asyncio.run(do_embedding_based_search(query))
+	#results = asyncio.wait_for(do_embedding_based_search(query))
 	output_string: str = ""
 	index = 1
 	for result in results:
