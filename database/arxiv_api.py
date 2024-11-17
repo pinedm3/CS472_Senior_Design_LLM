@@ -1,10 +1,10 @@
 import arxiv
 from arxiv import Client
-
+import asyncio
 client: Client = None
 
 
-def get_arxiv_articles(query: str, max_results: int) -> list[dict]:
+async def get_arxiv_articles(query: str, max_results: int) -> list[dict]:
 	global client
 	if client is None:
 		client = arxiv.Client()
@@ -23,4 +23,6 @@ def get_arxiv_articles(query: str, max_results: int) -> list[dict]:
 			"link": result.entry_id,
 		}
 		list_results.append(dict)
+  
+	print("done axriv func")
 	return list_results
