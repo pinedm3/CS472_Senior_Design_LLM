@@ -39,7 +39,7 @@ async def dataBaseSelectionSearch(searchTerms : str, database: str, resultsPerSe
     print("dBSS() took: ", t1-t0)
     return docData
 
-def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per_search: int = 25, database: str = "arxiv") -> list:
+async def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per_search: int = 25, database: str = "arxiv") -> list:
     
     # Generate search terms
     print("Generating search terms...")
@@ -52,7 +52,7 @@ def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per
     #ASYNCIO SEARCH ARTICLES
     
     
-    docList = asyncio.run(dataBaseSelectionSearch(search_terms,database,results_per_search))
+    docList = dataBaseSelectionSearch(search_terms,database,results_per_search)
     #APPEND seperated lists to one list
    
     # Store documents
@@ -80,7 +80,7 @@ def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per
          
     
     print("Indexing articles...")
-    indexing_pipeline.run({"documents": docList})
+    indexing_pipeline.run({"documents": await docList})
     
     result = query_pipeline.run({"text_embedder":{"text": query}})
 
