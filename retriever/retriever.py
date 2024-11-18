@@ -23,10 +23,13 @@ async def dataBaseSelectionSearch(searchTerms : str, database: str, resultsPerSe
     docData = []
     #Data base selection:
     t0 = time.time()
+    
     async with asyncio.TaskGroup() as tg:
         match database:
             case "arxiv":
                 for term in searchTerms:
+                    # The articles will be retrieved in dictionary format (see database.py)
+                    # The embeddings will only be generated from Title and Abstract, the rest of the fields will be metadata    for term in search_terms:
                     print("searching Arxiv with term: " + term)
                     #FIXME while calls are done concurrently... articles function done sequentially 
                     preArticles.append(tg.create_task(get_arxiv_articles(term, resultsPerSearch)))               
