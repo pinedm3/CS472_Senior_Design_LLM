@@ -11,27 +11,35 @@ from haystack.components.writers import DocumentWriter
 from haystack.utils import ComponentDevice, Device
 from sentence_transformers import SentenceTransformer
 from database.arxiv_api import get_arxiv_articles
-from database.pubmed_api import get_pubmed_articles
+from database.pubmed_api import get_pubmed_articles,instantiate_pubmed_object
 from llm.gemini_api import generate_search_terms
 import asyncio
 import time 
+
+
 #Chooses the exact database and runs appropiate function
 async def dataBaseSelectionSearch(searchTerms : str, database: str, resultsPerSearch: int):
     preArticles = []
     docData = []
     #Data base selection:
     t0 = time.time()
-    match database:
-        case "arxiv":
-             async with asyncio.TaskGroup() as tg:
+    async with asyncio.TaskGroup() as tg:
+        match database:
+            case "arxiv":
                 for term in searchTerms:
-                    preArticles.append(tg.create_task(get_arxiv_articles(term, resultsPerSearch)))
-                    
-        case "pubmed":
-             articles = await get_pubmed_articles(term, resultsPerSearch)
-        case _:
-            raise Exception("Invalid database %s" % database)
+                    print("searching Arxiv with term: " + term)
+                    #FIXME while calls are done concurrently... articles function done sequentially 
+                    preArticles.append(tg.create_task(get_arxiv_articles(term, resultsPerSearch)))               
+            case "pubmed":
+                
+                for term in searchTerms:
+                    print("searching pubmed with term: " + term)
+                    #FIXME pubmed instantiate_object setup?
+                    preArticles.append(tg.create_task(get_pubmed_articles(term, resultsPerSearch)))
+            case _:
+                raise Exception("Invalid database %s" % database)
     
+    print("Writing searched articles to document list...")    
     for articles in preArticles:
         for doc in articles._result:
             docData.append(Document(content=doc["abstract"], meta={"title": doc["title"],"link": doc["link"]}))
@@ -39,6 +47,7 @@ async def dataBaseSelectionSearch(searchTerms : str, database: str, resultsPerSe
     print("dBSS() took: ", t1-t0)
     return docData
 
+#runs haystack pipeline and calss dataBaseSeclectionSearch
 async def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per_search: int = 25, database: str = "arxiv") -> list:
     
     # Generate search terms
@@ -50,10 +59,7 @@ async def do_embedding_based_search(query: str, num_search_terms: int = 5, resul
     
     
     #ASYNCIO SEARCH ARTICLES
-    
-    
     docList = dataBaseSelectionSearch(search_terms,database,results_per_search)
-    #APPEND seperated lists to one list
    
     # Store documents
     document_store = InMemoryDocumentStore(embedding_similarity_function="cosine")
@@ -79,11 +85,14 @@ async def do_embedding_based_search(query: str, num_search_terms: int = 5, resul
     query_pipeline.connect("text_embedder.embedding", "retriever.query_embedding")
          
     
-    print("Indexing articles...")
-    indexing_pipeline.run({"documents": await docList})
-    
+    print("Running indexing pipeline...")
+    indexing_pipeline.run({"documents": await docList}) #await docList so other code can run
+    t0 = time.time()
     result = query_pipeline.run({"text_embedder":{"text": query}})
-
+    t1 = time.time()
+    
+    #Time might not be accurate due to await on doclist?
+    print("after databaseSearch and index run..embedd() took: ", t1-t0)
     return result['retriever']['documents']
 
 # Example usage

@@ -11,7 +11,7 @@ def pre_search(prev_btn, next_btn, results):
 	return prev_btn, next_btn, results
 
 def do_search(query: str, database: str):
-	results = asyncio.run(do_embedding_based_search(query))
+	results = asyncio.run(do_embedding_based_search(query, database=database))
 	output_string: str = ""
 	index = 1
 	for result in results:
