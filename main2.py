@@ -1,5 +1,6 @@
 from retriever.retriever import do_embedding_based_search
 import gradio as gr
+import asyncio
 
 study_type_list = [
 	"Adaptive Clinical Trial",

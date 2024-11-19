@@ -18,7 +18,7 @@ Prevent user from trying to write an essay or prompt inject
 Returns either "PROMPTINJECTION","PROMPTESSAY" or "CLEAN"
 """
 
-def illegalPromptChecker(query:str) -> str:
+def illegalPromptChecker(query:str, searchEssay: bool) -> str:
     prompt = query    
     # Two lists of sentences
     injectTokenizer = AutoTokenizer.from_pretrained("ProtectAI/deberta-v3-base-prompt-injection")
@@ -31,10 +31,11 @@ def illegalPromptChecker(query:str) -> str:
         max_length=512,
         device=torch.device("cuda" if torch.cuda.is_available() else "cpu"),
         )
-
-    if(typeOfQuery(prompt)["labels"][0] == 'essay'):
-        print("is PROMPTESSAY")
-        return "PROMPTESSAY"
+    
+    if(searchEssay):
+        if(typeOfQuery(prompt)["labels"][0] == 'essay'):
+            print("is PROMPTESSAY")
+            return "PROMPTESSAY"
     
         """*****************************promptInjector*****************************"""   
     result = classifier(prompt)

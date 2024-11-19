@@ -52,7 +52,7 @@ async def dataBaseSelectionSearch(searchTerms : str, database: str, resultsPerSe
 
 #runs haystack pipeline and calss dataBaseSeclectionSearch
 async def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per_search: int = 25, database: str = "arxiv") -> list:
-    
+   
     # Generate search terms
     print("Generating search terms...")
     t0 = time.time()
