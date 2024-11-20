@@ -18,9 +18,9 @@ import time
 
 
 #Chooses the exact database and runs appropiate function
-async def dataBaseSelectionSearch(searchTerms : str, database: str, resultsPerSearch: int):
-    preArticles = []
-    docData = []
+async def dataBase_selection_search(searchTerms : str, database: str, resultsPerSearch: int):
+    pre_articles = []
+    doc_data = []
     #Data base selection:
     t0 = time.time()
     
@@ -32,23 +32,23 @@ async def dataBaseSelectionSearch(searchTerms : str, database: str, resultsPerSe
                     # The embeddings will only be generated from Title and Abstract, the rest of the fields will be metadata    for term in search_terms:
                     print("searching Arxiv with term: " + term)
                     #FIXME while calls are done concurrently... articles function done sequentially 
-                    preArticles.append(tg.create_task(get_arxiv_articles(term, resultsPerSearch)))               
+                    pre_articles.append(tg.create_task(get_arxiv_articles(term, resultsPerSearch)))               
             case "pubmed":
                 
                 for term in searchTerms:
                     print("searching pubmed with term: " + term)
                     #FIXME pubmed instantiate_object setup?
-                    preArticles.append(tg.create_task(get_pubmed_articles(term, resultsPerSearch)))
+                    pre_articles.append(tg.create_task(get_pubmed_articles(term, resultsPerSearch)))
             case _:
                 raise Exception("Invalid database %s" % database)
     
     print("Writing searched articles to document list...")    
-    for articles in preArticles:
+    for articles in pre_articles:
         for doc in articles._result:
-            docData.append(Document(content=doc["abstract"], meta={"title": doc["title"],"link": doc["link"]}))
+            doc_data.append(Document(content=doc["abstract"], meta={"title": doc["title"],"link": doc["link"]}))
     t1 = time.time()
     print("dBSS() took: ", t1-t0)
-    return docData
+    return doc_data
 
 #runs haystack pipeline and calss dataBaseSeclectionSearch
 async def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per_search: int = 25, database: str = "arxiv") -> list:
@@ -62,7 +62,7 @@ async def do_embedding_based_search(query: str, num_search_terms: int = 5, resul
     
     
     #ASYNCIO SEARCH ARTICLES
-    docList = dataBaseSelectionSearch(search_terms,database,results_per_search)
+    doc_list = dataBase_selection_search(search_terms,database,results_per_search)
    
     # Store documents
     document_store = InMemoryDocumentStore(embedding_similarity_function="cosine")
@@ -89,7 +89,7 @@ async def do_embedding_based_search(query: str, num_search_terms: int = 5, resul
          
     
     print("Running indexing pipeline...")
-    indexing_pipeline.run({"documents": await docList}) #await docList so other code can run
+    indexing_pipeline.run({"documents": await doc_list}) #await docList so other code can run
     t0 = time.time()
     result = query_pipeline.run({"text_embedder":{"text": query}})
     t1 = time.time()

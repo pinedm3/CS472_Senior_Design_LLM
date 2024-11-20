@@ -4,7 +4,7 @@ import torch
 
  
 #Returns output to either use output["lables"][i] and/or output[""]
-def typeOfQuery(query:str) -> str:
+def type_of_query(query:str) -> str:
     text = query
     hypothesis_template = "This example is asking for a {}"
     classes_verbalized = ["summary", "search", "essay", "introduction"]
@@ -18,22 +18,22 @@ Prevent user from trying to write an essay or prompt inject
 Returns either "PROMPTINJECTION","PROMPTESSAY" or "CLEAN"
 """
 
-def illegalPromptChecker(query:str, searchEssay: bool) -> str:
+def illegal_prompt_checker(query:str, search_essay: bool) -> str:
     prompt = query    
     # Two lists of sentences
-    injectTokenizer = AutoTokenizer.from_pretrained("ProtectAI/deberta-v3-base-prompt-injection")
-    injectModel = AutoModelForSequenceClassification.from_pretrained("ProtectAI/deberta-v3-base-prompt-injection")
+    inject_tokenizer = AutoTokenizer.from_pretrained("ProtectAI/deberta-v3-base-prompt-injection")
+    inject_model = AutoModelForSequenceClassification.from_pretrained("ProtectAI/deberta-v3-base-prompt-injection")
     classifier = pipeline(
         "text-classification",
-        model=injectModel,
-        tokenizer=injectTokenizer,
+        model=inject_model,
+        tokenizer=inject_tokenizer,
         truncation=True,
         max_length=512,
         device=torch.device("cuda" if torch.cuda.is_available() else "cpu"),
         )
     
-    if(searchEssay):
-        if(typeOfQuery(prompt)["labels"][0] == 'essay'):
+    if(search_essay):
+        if(type_of_query(prompt)["labels"][0] == 'essay'):
             print("is PROMPTESSAY")
             return "PROMPTESSAY"
     

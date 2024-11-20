@@ -1,7 +1,7 @@
 from haystack import Pipeline
 from haystack.components.generators import HuggingFaceLocalGenerator
 from haystack.components.builders.prompt_builder import PromptBuilder
-from promptCheckers import typeOfQuery, illegalPromptChecker
+from promptCheckers import type_of_query, illegal_prompt_checker
 from seraApiTodocEmbbed import seraApiTodocEmbbed
 from haystack.document_stores.in_memory import InMemoryDocumentStore
 from haystack.components.embedders import SentenceTransformersTextEmbedder, SentenceTransformersDocumentEmbedder
@@ -96,7 +96,7 @@ while True:
     if prompt == "-1":
         break
     
-    illegalPromptCheck = illegalPromptChecker(prompt)
+    illegalPromptCheck = illegal_prompt_checker(prompt)
     
     match illegalPromptCheck:
         case "PROMPTINJECTION":
@@ -108,7 +108,7 @@ while True:
         case "CLEAN":
             print("Clean Prompt")
         
-    queryType = typeOfQuery(prompt)
+    queryType = type_of_query(prompt)
     #oneshot classifer detects whether search
     if  queryType["labels"][0] == 'search':
         print("Query is of search type")
