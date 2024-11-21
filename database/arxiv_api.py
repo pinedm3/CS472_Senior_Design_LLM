@@ -1,8 +1,8 @@
 import arxiv
 from arxiv import Client
 import asyncio
-client: Client = None
 
+client: Client = None
 
 async def get_arxiv_articles(query: str, max_results: int) -> list[dict]:
 	global client

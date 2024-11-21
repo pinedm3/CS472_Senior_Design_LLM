@@ -1,11 +1,13 @@
 from pymed import PubMed
 
-def instantiate_pubmed_object(toolname: str = None, email: str = None) -> PubMed:
-    pubmed_connection = PubMed(tool = toolname, email = email)
-    return pubmed_connection
+client: PubMed
 
 def get_pubmed_articles(pubmed, query: str, max_results: int) -> list[dict]:
-    result = pubmed.query(query, max_results)
+    global client
+    if client is None:
+        client = PubMed()
+          
+    result = client.query(query, max_results)
 
     list_results = []
     for article in list(result):

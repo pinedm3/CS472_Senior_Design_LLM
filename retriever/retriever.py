@@ -11,7 +11,7 @@ from haystack.components.writers import DocumentWriter
 from haystack.utils import ComponentDevice, Device
 from sentence_transformers import SentenceTransformer
 from database.arxiv_api import get_arxiv_articles
-from database.pubmed_api import get_pubmed_articles,instantiate_pubmed_object
+from database.pubmed_api import get_pubmed_articles
 from llm.gemini_api import generate_search_terms
 import asyncio
 import time 
