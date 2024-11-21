@@ -1,7 +1,7 @@
 from haystack import Pipeline
 from haystack.components.generators import HuggingFaceLocalGenerator
 from haystack.components.builders.prompt_builder import PromptBuilder
-from promptCheckers import type_of_query, illegal_prompt_checker
+from P0Testing.prompt_checkers import type_of_query, illegal_prompt_checker
 from seraApiTodocEmbbed import seraApiTodocEmbbed
 from haystack.document_stores.in_memory import InMemoryDocumentStore
 from haystack.components.embedders import SentenceTransformersTextEmbedder, SentenceTransformersDocumentEmbedder

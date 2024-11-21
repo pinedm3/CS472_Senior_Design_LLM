@@ -1,6 +1,8 @@
 from retriever.retriever import do_embedding_based_search
+from promptchecking.prompt_checkers import illegal_prompt_checker
 import gradio as gr
 import asyncio
+ 
 
 study_type_list = [
 	"Adaptive Clinical Trial",
@@ -108,6 +110,9 @@ def pre_search(prev_btn, next_btn, results):
 	return prev_btn, next_btn, results
 
 def do_search(query: str, database: str):
+	if(illegal_prompt_checker(query,False) == "PROMPTINJECTION"):
+		raise gr.Error("Reprompt with a proper query", 5,True,"Prompt Injection Detected")
+  
 	results = asyncio.run(do_embedding_based_search(query, database=database))
 	output_string: str = ""
 	index = 1

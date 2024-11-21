@@ -16,7 +16,6 @@ from llm.gemini_api import generate_search_terms
 import asyncio
 import time 
 
-
 #Chooses the exact database and runs appropiate function
 async def dataBase_selection_search(searchTerms : str, database: str, resultsPerSearch: int):
     pre_articles = []
