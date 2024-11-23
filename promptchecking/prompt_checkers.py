@@ -4,7 +4,7 @@ import torch
 
  
 #Returns output to either use output["lables"][i] and/or output[""]
-def type_of_query(query:str) -> str:
+async def type_of_query(query:str) -> str:
     text = query
     hypothesis_template = "This example is asking for a {}"
     classes_verbalized = ["summary", "search", "essay", "introduction"]
@@ -18,7 +18,7 @@ Prevent user from trying to write an essay or prompt inject
 Returns either "PROMPTINJECTION","PROMPTESSAY" or "CLEAN"
 """
 
-def illegal_prompt_checker(query:str, search_essay: bool) -> str:
+async def illegal_prompt_checker(query:str, search_essay: bool) -> str:
     prompt = query    
     # Two lists of sentences
     inject_tokenizer = AutoTokenizer.from_pretrained("ProtectAI/deberta-v3-base-prompt-injection")
