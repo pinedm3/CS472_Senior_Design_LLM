@@ -109,14 +109,14 @@ def pre_search(prev_btn, next_btn, results):
 	results.visible = False
 	return prev_btn, next_btn, results
 
-def do_search(query: str, database: str):
-	if(illegal_prompt_checker(query,False) == "PROMPTINJECTION"):
+async def do_search(query: str, database: str):
+	if(await illegal_prompt_checker(query,False) == "PROMPTINJECTION"):
 		raise gr.Error("Reprompt with a proper query", 5,True,"Prompt Injection Detected")
   
-	results = asyncio.run(do_embedding_based_search(query, database=database))
+	results = do_embedding_based_search(query, database=database)
 	output_string: str = ""
 	index = 1
-	for result in results:
+	for result in await results:
 		percent_score = round(result.score * 100, 2)
 		output_string += str(index) + ". %s (%s relevance)\n %s\n\n" % (result.meta["title"], str(percent_score) + "%", result.meta["link"])
 		index += 1
@@ -130,9 +130,9 @@ def set_filters(input):
 	pubmed_filters = ["Publication Date", "Study Type", "Age", "Sex", "Species", "Custom Filter"]
 	arxiv_filters = []
 	if input == "pubmed":
-		return gr.CheckboxGroup(label="Optional Filters", choices = pubmed_filters, interactive = True)
+		return gr.CheckboxGroup(label="Optional Filters", choices = pubmed_filters, interactive = True,visible=True)
 	if input == "arxiv":
-		return gr.CheckboxGroup(label="Optional Filters", choices = arxiv_filters, type = 'index')
+		return gr.CheckboxGroup(label="Optional Filters", choices = arxiv_filters, type = 'index', visible=False)
 	else:
 		return gr.CheckboxGroup(label="Optional Filters", choices = [], type = 'index')
 
@@ -179,7 +179,7 @@ with gr.Blocks() as demo:
 
 	with gr.Row():
 		with gr.Column(scale = 1):
-			enabled_filters = gr.CheckboxGroup(label = "Optional Filters")
+			enabled_filters = gr.CheckboxGroup(label = "Optional Filters",visible=False)
 			dynamic_filters = [gr.Radio(visible = False), gr.Dropdown(visible = False), gr.Textbox(visible = False)]
 			dropdown.change(fn = set_filters, inputs = dropdown, outputs = enabled_filters, api_name = False)
 		with gr.Column(scale = 2):
@@ -214,6 +214,6 @@ with gr.Blocks() as demo:
 		prev_btn = gr.Button("Previous Page", visible = False)
 		next_btn = gr.Button("Next Page", visible = False)
 	search_btn.click(fn=pre_search, inputs=[prev_btn, next_btn, results], outputs=[prev_btn, next_btn, results])
-	search_btn.click(fn=do_search, inputs=[search_bar, dropdown], outputs=[search_bar, results])
-
+	search_btn.click(fn=do_search, inputs=[search_bar, dropdown], outputs=[search_bar, results],queue=True,concurrency_limit="default")
+demo.queue(max_size=10,default_concurrency_limit=4)
 demo.launch()
