@@ -3,6 +3,7 @@ from promptchecking.prompt_checkers import illegal_prompt_checker
 import gradio as gr
 import asyncio
  
+results_per_page = 20
 
 study_type_list = [
 	"Adaptive Clinical Trial",
@@ -106,25 +107,36 @@ age_range_list = [
 def pre_search():
 	return gr.Button(visible=False)
 
-def do_search(query: str, database: str):
+def do_search(query: str, database: str, state: dict):
 	print("Checking for prompt injection...")
 	if(illegal_prompt_checker(query,False) == "PROMPTINJECTION"):
 		print("Prompt injection detected.")
 		raise gr.Error("Reprompt with a proper query", 5,True,"Prompt Injection Detected")
   
-	results = do_embedding_based_search(query, database=database)
+	state["results"] = do_embedding_based_search(query, database=database)
+	state["starting_index"] = 0
+	return gr.skip(),  gr.Button(visible=True),  gr.Button(visible=True), state
 
+def next_page(state: dict):
+	if "starting_index" in state.keys():
+		state["starting_index"] = min(state["starting_index"] + results_per_page, len(state["results"]))
+	return state
+
+def previous_page(state: dict):
+	if "starting_index" in state.keys():
+		state["starting_index"] = max(state["starting_index"] - results_per_page, 0)
+	return state
+
+def show_results(state: dict):
 	output_string: str = ""
-	index = 1
-	for result in results:
+	starting_index = state["starting_index"]
+	for i in range(starting_index, starting_index + results_per_page):
+		if i >= len(state["results"]):
+			break
+		result = state["results"][i]
 		percent_score = round(result.score * 100, 2)
-		output_string += str(index) + ". %s (%s relevance)\n %s\n\n" % (result.meta["title"], str(percent_score) + "%", result.meta["link"])
-		index += 1
-
-	return gr.skip(), gr.Markdown(label="Search Results", container=True, visible=True, value=output_string)
-
-def show_results(starting_index: int = 0, results_to_show: int = 10, results: dict  = {}):
-	pass
+		output_string += str(i + 1) + ". %s (%s relevance)<br>%s \n\n" % (result.meta["title"], str(percent_score) + "%", result.meta["link"])
+	return gr.Markdown(label="Search Results", container=True, visible=True, value=output_string)
 
 def set_filters(input):
 	pubmed_filters = ["Publication Date", "Study Type", "Age", "Sex", "Species", "Custom Filter"]
@@ -209,8 +221,15 @@ with gr.Blocks() as demo:
 		search_bar = gr.Textbox(container=False, placeholder="Ask a question.", max_lines=1)
 		search_btn = gr.Button("Search", scale=0, min_width=80)
 	results = gr.Markdown(visible=False)
+	with gr.Row(equal_height=True):
+		prev_page_btn = gr.Button("Previous", visible=False)
+		next_page_btn = gr.Button("Next", visible=False)
 
 	search_btn.click(fn=pre_search, outputs=[results])
-	search_btn.click(fn=do_search, inputs=[search_bar, dropdown], outputs=[search_bar, results],queue=True,concurrency_limit="default")
+	search_btn.click(fn=do_search, inputs=[search_bar, dropdown, state], outputs=[search_bar, next_page_btn, prev_page_btn, state],queue=True,concurrency_limit="default").then(fn=show_results, inputs=[state], outputs=[results])
+	next_page_btn.click(fn=next_page, inputs=state, outputs=state).then(fn=show_results, inputs=[state], outputs=[results])
+	prev_page_btn.click(fn=previous_page, inputs=state, outputs=state).then(fn=show_results, inputs=[state], outputs=[results])
+
+
 demo.queue(max_size=10,default_concurrency_limit=4)
 demo.launch()
