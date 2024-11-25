@@ -1,8 +1,8 @@
 from pymed import PubMed
 
-client: PubMed
+client: PubMed = None
 
-def get_pubmed_articles(pubmed, query: str, max_results: int) -> list[dict]:
+def get_pubmed_articles(query: str, max_results: int) -> list[dict]:
     global client
     if client is None:
         client = PubMed()
