@@ -103,11 +103,8 @@ age_range_list = [
 	"80 and over: 80+ years",
 ]
 
-def pre_search(prev_btn, next_btn, results):
-	prev_btn.visible = False
-	next_btn.visible = False
-	results.visible = False
-	return prev_btn, next_btn, results
+def pre_search():
+	return gr.Button(visible=False)
 
 async def do_search(query: str, database: str):
 	if(await illegal_prompt_checker(query,False) == "PROMPTINJECTION"):
@@ -210,10 +207,7 @@ with gr.Blocks() as demo:
 		search_btn = gr.Button("Search", scale=0, min_width=80)
 	results = gr.Markdown(visible=False)
 
-	with gr.Row(equal_height=True):
-		prev_btn = gr.Button("Previous Page", visible = False)
-		next_btn = gr.Button("Next Page", visible = False)
-	search_btn.click(fn=pre_search, inputs=[prev_btn, next_btn, results], outputs=[prev_btn, next_btn, results])
+	search_btn.click(fn=pre_search, outputs=[results])
 	search_btn.click(fn=do_search, inputs=[search_bar, dropdown], outputs=[search_bar, results],queue=True,concurrency_limit="default")
 demo.queue(max_size=10,default_concurrency_limit=4)
 demo.launch()
