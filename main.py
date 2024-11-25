@@ -211,6 +211,15 @@ with gr.Blocks() as demo:
 	results = gr.Markdown(visible=False)
 
 	search_btn.click(fn=pre_search, outputs=[results])
-	search_btn.click(fn=do_search, inputs=[search_bar, dropdown], outputs=[search_bar, results],queue=True,concurrency_limit="default")
+	
+	gr.on(
+    	triggers=[search_bar.submit,search_btn.click],
+		fn=do_search, 
+  		inputs=[search_bar, dropdown], 
+    	outputs=[search_bar, results],
+     	queue=True,concurrency_limit="default"
+    )
+	#search_bar.submit(fn=do_search, inputs=[search_bar, dropdown], outputs=[search_bar, results],queue=True,concurrency_limit="default")
+	#search_btn.click(fn=do_search, inputs=[search_bar, dropdown], outputs=[search_bar, results],queue=True,concurrency_limit="default")
 demo.queue(max_size=10,default_concurrency_limit=4)
 demo.launch()

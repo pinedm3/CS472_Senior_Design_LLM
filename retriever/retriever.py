@@ -62,10 +62,10 @@ def do_embedding_based_search(query: str, num_search_terms: int = 10, results_pe
     
     #ASYNCIO SEARCH ARTICLES
     doc_list = database_selection_search(search_terms,database,results_per_search)
-   
+    t0 = time.time()
+    
     # Store documents
     document_store = InMemoryDocumentStore(embedding_similarity_function="cosine")
-
     model = "BAAI/bge-small-en-v1.5"
 
     # Use GPU if available
@@ -75,7 +75,6 @@ def do_embedding_based_search(query: str, num_search_terms: int = 10, results_pe
     
     document_embedder = SentenceTransformersDocumentEmbedder(model=model, device=device)
     text_embedder = SentenceTransformersTextEmbedder(model=model, device=device)
-
     indexing_pipeline = Pipeline()
     indexing_pipeline.add_component("embedder", document_embedder)
     indexing_pipeline.add_component("writer", DocumentWriter(document_store=document_store,policy='DuplicatePolicy.SKIP'))
@@ -88,13 +87,12 @@ def do_embedding_based_search(query: str, num_search_terms: int = 10, results_pe
          
     
     print("Running indexing pipeline...")
-    indexing_pipeline.run({"documents": doc_list}) #await docList so other code can run
-    t0 = time.time()
+    indexing_pipeline.run({"documents": doc_list}) 
     result = query_pipeline.run({"text_embedder":{"text": query}})
     t1 = time.time()
     
     #Time might not be accurate due to await on doclist?
-    print("after databaseSearch and index run..embedd() took: ", t1-t0)
+    print("after databaseSearch took: ", t1-t0)
     return result['retriever']['documents']
 
 # Example usage
