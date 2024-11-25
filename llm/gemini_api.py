@@ -26,7 +26,7 @@ def generate(prompt: str, temperature: float = 1.0) -> GenerateContentResponse:
 
 # Generates search terms given a user query, uses 0 temperature to be deterministic
 def generate_search_terms(user_query: str, num_search_terms: int) -> list[str]:
-	prompt = "You are a research assistant. Generate the %s best search queries that can be used to retrieve scholarly articles that can help the user research the following topic: \n %s\n Respond with only the search terms separated by newlines." % (str(num_search_terms), user_query)
+	prompt = "You are a research assistant. Generate %s brief search queries that can be used to retrieve scholarly articles that can help the user research the following topic, with each being only a few words: \n %s\n Respond with only the search terms separated by newlines. Do NOT use AND or OR." % (str(num_search_terms), user_query)
 	response = generate(prompt, 0)
 	search_queries = response.text.replace("\"","").split("\n")
 	search_queries = search_queries[:num_search_terms]
