@@ -106,14 +106,17 @@ age_range_list = [
 def pre_search():
 	return gr.Button(visible=False)
 
-async def do_search(query: str, database: str):
-	if(await illegal_prompt_checker(query,False) == "PROMPTINJECTION"):
+def do_search(query: str, database: str):
+	print("Checking for prompt injection...")
+	if(illegal_prompt_checker(query,False) == "PROMPTINJECTION"):
+		print("Prompt injection detected.")
 		raise gr.Error("Reprompt with a proper query", 5,True,"Prompt Injection Detected")
   
 	results = do_embedding_based_search(query, database=database)
+
 	output_string: str = ""
 	index = 1
-	for result in await results:
+	for result in results:
 		percent_score = round(result.score * 100, 2)
 		output_string += str(index) + ". %s (%s relevance)\n %s\n\n" % (result.meta["title"], str(percent_score) + "%", result.meta["link"])
 		index += 1

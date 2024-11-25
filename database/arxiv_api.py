@@ -4,10 +4,10 @@ import asyncio
 
 client: Client = None
 
-async def get_arxiv_articles(query: str, max_results: int) -> list[dict]:
+def get_arxiv_articles(query: str, max_results: int) -> list[dict]:
 	global client
 	if client is None:
-		client = arxiv.Client()
+		client = arxiv.Client(page_size=100)
 
 	search = arxiv.Search(
 		query = query,

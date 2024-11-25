@@ -13,45 +13,43 @@ from sentence_transformers import SentenceTransformer
 from database.arxiv_api import get_arxiv_articles
 from database.pubmed_api import get_pubmed_articles
 from llm.gemini_api import generate_search_terms
-import asyncio
 import time 
 
 #Chooses the exact database and runs appropiate function
-async def dataBase_selection_search(searchTerms : str, database: str, resultsPerSearch: int):
+def database_selection_search(search_terms : list[str], database: str, results_per_search: int) -> list[Document]:
     pre_articles = []
     doc_data = []
     #Data base selection:
     t0 = time.time()
-    
-    async with asyncio.TaskGroup() as tg:
-        match database:
-            case "arxiv":
-                for term in searchTerms:
-                    # The articles will be retrieved in dictionary format (see database.py)
-                    # The embeddings will only be generated from Title and Abstract, the rest of the fields will be metadata    for term in search_terms:
-                    print("searching Arxiv with term: " + term)
-                    #FIXME while calls are done concurrently... articles function done sequentially 
-                    pre_articles.append(tg.create_task(get_arxiv_articles(term, resultsPerSearch)))               
-            case "pubmed":
-                
-                for term in searchTerms:
-                    print("searching pubmed with term: " + term)
-                    #FIXME pubmed instantiate_object setup?
-                    pre_articles.append(tg.create_task(get_pubmed_articles(term, resultsPerSearch)))
-            case _:
-                raise Exception("Invalid database %s" % database)
-    
+
+    combined_query = ""
+    for term in search_terms:
+        combined_query += "(" + term + ")"
+        if term != search_terms[-1]:
+            combined_query += " OR "
+    print("Combined queries: %s" % combined_query)
+
+    match database:
+        case "arxiv":
+            print("Searching using Arxiv")
+            pre_articles.append(get_arxiv_articles(combined_query, len(search_terms) * results_per_search))
+        case "pubmed":
+            print("Searching using PubMed")
+            pre_articles.append(get_pubmed_articles(combined_query, len(search_terms) * results_per_search))
+        case _:
+            raise Exception("Invalid database %s" % database)
     print("Writing searched articles to document list...")    
     for articles in pre_articles:
-        for doc in articles._result:
+        for doc in articles:
             doc_data.append(Document(content=doc["abstract"], meta={"title": doc["title"],"link": doc["link"]}))
     t1 = time.time()
     print("dBSS() took: ", t1-t0)
+    print("Retrieved %s articles" % len(doc_data))
     return doc_data
 
+
 #runs haystack pipeline and calss dataBaseSeclectionSearch
-async def do_embedding_based_search(query: str, num_search_terms: int = 5, results_per_search: int = 25, database: str = "arxiv") -> list:
-   
+def do_embedding_based_search(query: str, num_search_terms: int = 10, results_per_search: int = 15, database: str = "arxiv") -> list:
     # Generate search terms
     print("Generating search terms...")
     t0 = time.time()
@@ -59,9 +57,11 @@ async def do_embedding_based_search(query: str, num_search_terms: int = 5, resul
     t1 = time.time()
     print("Took: %f. \nSearch terms generated:" % (t1-t0))
     
+    for term in search_terms:
+        print(term)
     
     #ASYNCIO SEARCH ARTICLES
-    doc_list = dataBase_selection_search(search_terms,database,results_per_search)
+    doc_list = database_selection_search(search_terms,database,results_per_search)
    
     # Store documents
     document_store = InMemoryDocumentStore(embedding_similarity_function="cosine")
@@ -88,7 +88,7 @@ async def do_embedding_based_search(query: str, num_search_terms: int = 5, resul
          
     
     print("Running indexing pipeline...")
-    indexing_pipeline.run({"documents": await doc_list}) #await docList so other code can run
+    indexing_pipeline.run({"documents": doc_list}) #await docList so other code can run
     t0 = time.time()
     result = query_pipeline.run({"text_embedder":{"text": query}})
     t1 = time.time()

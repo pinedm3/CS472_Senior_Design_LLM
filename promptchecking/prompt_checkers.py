@@ -18,7 +18,7 @@ Prevent user from trying to write an essay or prompt inject
 Returns either "PROMPTINJECTION","PROMPTESSAY" or "CLEAN"
 """
 
-async def illegal_prompt_checker(query:str, search_essay: bool) -> str:
+def illegal_prompt_checker(query:str, search_essay: bool) -> str:
     prompt = query    
     # Two lists of sentences
     inject_tokenizer = AutoTokenizer.from_pretrained("ProtectAI/deberta-v3-base-prompt-injection")
