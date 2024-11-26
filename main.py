@@ -226,10 +226,15 @@ with gr.Blocks() as demo:
 		next_page_btn = gr.Button("Next", visible=False)
 
 	search_btn.click(fn=pre_search, outputs=[results])
-	search_btn.click(fn=do_search, inputs=[search_bar, dropdown, state], outputs=[search_bar, next_page_btn, prev_page_btn, state],queue=True,concurrency_limit="default").then(fn=show_results, inputs=[state], outputs=[results])
+	gr.on(
+    	triggers=[search_bar.submit,search_btn.click],
+		fn=do_search, 
+  		inputs=[search_bar, dropdown, state], 
+    	outputs=[search_bar, next_page_btn, prev_page_btn, state],
+     	queue=True,concurrency_limit="default"
+    ).then(fn=show_results, inputs=[state], outputs=[results])
 	next_page_btn.click(fn=next_page, inputs=state, outputs=state).then(fn=show_results, inputs=[state], outputs=[results])
 	prev_page_btn.click(fn=previous_page, inputs=state, outputs=state).then(fn=show_results, inputs=[state], outputs=[results])
-
-
+	
 demo.queue(max_size=10,default_concurrency_limit=4)
 demo.launch()
