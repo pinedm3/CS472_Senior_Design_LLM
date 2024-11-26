@@ -1,1 +1,21 @@
-a {color: #FF0000} .gradio-container {background: rgb(0, 166, 228)}
+/* a {color: #FF0000} .gradio-container {background: rgb(0, 166, 228)} */
+/* Default (light mode) styles */
+a {
+    color: blue; /* Light mode link color */
+    text-decoration: none; /* Optional: remove underline */
+}
+
+a:hover {
+    color: darkblue; /* Hover effect for light mode */
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+    a {
+        color: lightblue; /* Dark mode link color */
+    }
+
+    a:hover {
+        color: cyan; /* Hover effect for dark mode */
+    }
+}
