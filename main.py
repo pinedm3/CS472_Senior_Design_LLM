@@ -181,7 +181,7 @@ def generate_filter_custom(input):
 	else:
 		return gr.Textbox(label = "Custom Filter", visible = False)
 
-with gr.Blocks() as demo:
+with gr.Blocks(theme=gr.themes.Ocean(),css_paths="theming.css",fill_width=True) as demo:
 	state = gr.State({})
 	title = gr.Label(container=False, value="AI-Powered Research Assistant")
 	dropdown = gr.Dropdown(label="Database Selection", choices=[("Arxiv - STEM Articles", "arxiv"), ("PubMed - Medical Literature", "pubmed")], value="arxiv")
@@ -234,4 +234,5 @@ with gr.Blocks() as demo:
 	prev_page_btn.click(fn=previous_page, inputs=state, outputs=state).then(fn=show_results, inputs=[state], outputs=[results])
 	
 demo.queue(max_size=10,default_concurrency_limit=4)
+
 demo.launch()
