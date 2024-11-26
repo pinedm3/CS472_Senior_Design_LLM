@@ -104,9 +104,6 @@ age_range_list = [
 	"80 and over: 80+ years",
 ]
 
-def pre_search():
-	return gr.Button(visible=False)
-
 def do_search(query: str, database: str, state: dict):
 	print("Checking for prompt injection...")
 	if(illegal_prompt_checker(query,False) == "PROMPTINJECTION"):
@@ -225,14 +222,14 @@ with gr.Blocks() as demo:
 		prev_page_btn = gr.Button("Previous", visible=False)
 		next_page_btn = gr.Button("Next", visible=False)
 
-	search_btn.click(fn=pre_search, outputs=[results])
 	gr.on(
-    	triggers=[search_bar.submit,search_btn.click],
+		triggers=[search_bar.submit,search_btn.click],
 		fn=do_search, 
   		inputs=[search_bar, dropdown, state], 
     	outputs=[search_bar, next_page_btn, prev_page_btn, state],
      	queue=True,concurrency_limit="default"
     ).then(fn=show_results, inputs=[state], outputs=[results])
+
 	next_page_btn.click(fn=next_page, inputs=state, outputs=state).then(fn=show_results, inputs=[state], outputs=[results])
 	prev_page_btn.click(fn=previous_page, inputs=state, outputs=state).then(fn=show_results, inputs=[state], outputs=[results])
 	
