@@ -14,7 +14,8 @@ from database.arxiv_api import get_arxiv_articles
 from database.pubmed_api import get_pubmed_articles
 from llm.gemini_api import generate_search_terms
 import time 
-
+import arxiv
+import gradio as gr
 #Chooses the exact database and runs appropiate function
 def database_selection_search(search_terms : list[str], database: str, results_per_search: int) -> list[Document]:
     pre_articles = []
@@ -32,7 +33,15 @@ def database_selection_search(search_terms : list[str], database: str, results_p
     match database:
         case "arxiv":
             print("Searching using Arxiv")
-            pre_articles.append(get_arxiv_articles(combined_query, len(search_terms) * results_per_search))
+            for i in range(3):
+                try:
+                    pre_articles.append(get_arxiv_articles(combined_query, len(search_terms) * results_per_search))
+                except arxiv.UnexpectedEmptyPageError as e:
+                    print("Arxiv error occured, retrying: %s" % e)
+                    if i == 2:
+                        raise gr.Error("Arxiv search failed! Try searching again", title="Search Error")
+                else:
+                    break
         case "pubmed":
             print("Searching using PubMed")
             pre_articles.append(get_pubmed_articles(combined_query, len(search_terms) * results_per_search))
@@ -51,7 +60,7 @@ def database_selection_search(search_terms : list[str], database: str, results_p
 #runs haystack pipeline and calss dataBaseSeclectionSearch
 def do_embedding_based_search(query: str, num_search_terms: int = 10, results_per_search: int = 15, database: str = "arxiv") -> list:
     # Generate search terms
-    print("Generating search terms...")
+    print("Generating %s search terms..." % num_search_terms)
     t0 = time.time()
     search_terms:  list[str] = generate_search_terms(query, num_search_terms)
     t1 = time.time()
