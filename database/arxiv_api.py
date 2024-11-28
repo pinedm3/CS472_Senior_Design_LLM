@@ -9,11 +9,11 @@ def get_arxiv_articles(query: str, max_results: int) -> list[dict]:
 	if client is None:
 		client = arxiv.Client(page_size=100)
 
-		search = arxiv.Search(
-			query = query,
-			max_results = max_results,
-			sort_by = arxiv.SortCriterion.Relevance
-		)
+	search = arxiv.Search(
+		query = query,
+		max_results = max_results,
+		sort_by = arxiv.SortCriterion.Relevance
+	)
 
 	results = client.results(search)
 	list_results = []
