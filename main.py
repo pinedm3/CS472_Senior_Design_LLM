@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from retriever.retriever import do_embedding_based_search
 from promptchecking.prompt_checkers import illegal_prompt_checker
 import gradio as gr
@@ -104,13 +106,23 @@ age_range_list = [
 	"80 and over: 80+ years",
 ]
 
-def do_search(query: str, database: str, state: dict):
+def get_current_date():
+	current_date = datetime.now().date()
+	return current_date.strftime("%Y-%m-%d")
+
+def do_search(query: str, database: str, state: dict, p_date_from, p_date_to, stu_type, age_r, sex_t, spe_type, cus_filter):
 	print("Checking for prompt injection...")
 	if(illegal_prompt_checker(query,False) == "PROMPTINJECTION"):
 		print("Prompt injection detected.")
 		raise gr.Error("Reprompt with a proper query", 5,True,"Prompt Injection Detected")
-  
-	state["results"] = do_embedding_based_search(query, database=database)
+
+	filter_string = ""
+	if p_date_from is not None:
+		filter_string += " AND " + str(p_date_from.year) + '/' + str(p_date_from.month) + '/' + str(p_date_from.day) + ':' + str(p_date_to.year) + '/' + str(p_date_to.month) + '/' + str(p_date_to.day) + "[dp]"
+
+	print(filter_string)
+
+	state["results"] = do_embedding_based_search(query, filter_string, database=database)
 	state["starting_index"] = 0
 	return gr.skip(),  gr.Button(visible=True),  gr.Button(visible=True), state
 
@@ -139,17 +151,19 @@ def set_filters(input):
 	pubmed_filters = ["Publication Date", "Study Type", "Age", "Sex", "Species", "Custom Filter"]
 	arxiv_filters = []
 	if input == "pubmed":
-		return gr.CheckboxGroup(label="Optional Filters", choices = pubmed_filters, interactive = True,visible=True)
+		return gr.update(label="Optional Filters", choices = pubmed_filters, interactive = True, visible=True)
 	if input == "arxiv":
-		return gr.CheckboxGroup(label="Optional Filters", choices = arxiv_filters, type = 'index', visible=False)
+		return gr.update(label="Optional Filters", choices = arxiv_filters, visible=False)
 	else:
-		return gr.CheckboxGroup(label="Optional Filters", choices = [], type = 'index')
+		return gr.update(label="Optional Filters", choices = [])
 
 def generate_filter_publication(input):
 	if 'Publication Date' in input:
-		return gr.DateTime(label = "From", show_label = True, include_time = False, type = 'datetime', visible = True), gr.DateTime(label = "To", show_label = True, include_time = False, type = 'datetime', visible = True)
+		print("Enabling components")
+		return gr.update(visible = True), gr.update(visible = True, value = get_current_date())
 	else:
-		return gr.DateTime(label = "From", show_label = True, include_time = False, type = 'datetime', visible = False), gr.DateTime(label = "To", show_label = True, include_time = False, type = 'datetime', visible = False)
+		print("Disabling components")
+		return gr.update(visible = False, value = None), gr.update(visible = False, value = None)
 
 def generate_filter_studytype(input):
 	if 'Study Type' in input:
@@ -188,12 +202,11 @@ with gr.Blocks(theme=gr.themes.Ocean(),css_paths="theming.css",fill_width=True) 
 
 	with gr.Row():
 		with gr.Column(scale = 1):
-			enabled_filters = gr.CheckboxGroup(label = "Optional Filters",visible=False)
-			dynamic_filters = [gr.Radio(visible = False), gr.Dropdown(visible = False), gr.Textbox(visible = False)]
-			dropdown.change(fn = set_filters, inputs = dropdown, outputs = enabled_filters, api_name = False)
+			enabled_filters = gr.CheckboxGroup(label="Optional Filters", choices = [], interactive = True, visible=False)
 		with gr.Column(scale = 2):
 			with gr.Row():
-				publication_date = [gr.DateTime(visible=False), gr.DateTime(visible=False)]
+				publication_date_from = gr.DateTime(label = "From", show_label = True, include_time = False, type = 'datetime', visible = False, value = None)
+				publication_date_to = gr.DateTime(label = "To", show_label = True, include_time = False, visible = False, value = None)
 			with gr.Row():
 				with gr.Column(scale = 1):
 					study_type = gr.Dropdown(visible = False)
@@ -207,12 +220,13 @@ with gr.Blocks(theme=gr.themes.Ocean(),css_paths="theming.css",fill_width=True) 
 			with gr.Row():
 				custom_filter = gr.Textbox(visible = False)
 
-			enabled_filters.change(fn = generate_filter_publication, inputs = enabled_filters, outputs = publication_date)
-			enabled_filters.change(fn = generate_filter_studytype, inputs = enabled_filters, outputs = study_type)
-			enabled_filters.change(fn = generate_filter_age, inputs = enabled_filters, outputs = age_range)
-			enabled_filters.change(fn = generate_filter_sex, inputs = enabled_filters, outputs = sex_type)
-			enabled_filters.change(fn = generate_filter_species, inputs = enabled_filters, outputs = species_type)
-			enabled_filters.change(fn = generate_filter_custom, inputs = enabled_filters, outputs = custom_filter)
+	dropdown.change(fn=set_filters, inputs=dropdown, outputs=enabled_filters)
+	enabled_filters.change(fn = generate_filter_publication, inputs = enabled_filters, outputs = (publication_date_from, publication_date_to))
+	enabled_filters.change(fn = generate_filter_studytype, inputs = enabled_filters, outputs = study_type)
+	enabled_filters.change(fn = generate_filter_age, inputs = enabled_filters, outputs = age_range)
+	enabled_filters.change(fn = generate_filter_sex, inputs = enabled_filters, outputs = sex_type)
+	enabled_filters.change(fn = generate_filter_species, inputs = enabled_filters, outputs = species_type)
+	enabled_filters.change(fn = generate_filter_custom, inputs = enabled_filters, outputs = custom_filter)
 
 	with gr.Row(equal_height=True):
 		search_bar = gr.Textbox(container=False, placeholder="Ask a question.", max_lines=1)
@@ -225,7 +239,7 @@ with gr.Blocks(theme=gr.themes.Ocean(),css_paths="theming.css",fill_width=True) 
 	gr.on(
 		triggers=[search_bar.submit,search_btn.click],
 		fn=do_search, 
-  		inputs=[search_bar, dropdown, state], 
+  		inputs=[search_bar, dropdown, state, publication_date_from, publication_date_to, study_type, age_range, sex_type, species_type, custom_filter],
     	outputs=[search_bar, next_page_btn, prev_page_btn, state],
      	queue=True,concurrency_limit="default"
     ).then(fn=show_results, inputs=[state], outputs=[results])

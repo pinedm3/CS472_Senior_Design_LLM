@@ -17,18 +17,21 @@ import time
 import arxiv
 import gradio as gr
 #Chooses the exact database and runs appropiate function
-def database_selection_search(search_terms : list[str], database: str, results_per_search: int) -> list[Document]:
+def database_selection_search(search_terms : list[str], filter_string:str, database: str, results_per_search: int) -> list[Document]:
     pre_articles = []
     doc_data = []
     #Data base selection:
     t0 = time.time()
 
-    combined_query = ""
+    combined_query = "("
     for term in search_terms:
         combined_query += "(" + term + ")"
         if term != search_terms[-1]:
             combined_query += " OR "
+    combined_query += ')' + filter_string
     print("Combined queries: %s" % combined_query)
+
+
 
     match database:
         case "arxiv":
@@ -58,7 +61,7 @@ def database_selection_search(search_terms : list[str], database: str, results_p
 
 
 #runs haystack pipeline and calss dataBaseSeclectionSearch
-def do_embedding_based_search(query: str, num_search_terms: int = 10, results_per_search: int = 15, database: str = "arxiv") -> list:
+def do_embedding_based_search(query: str, filter_string: str, num_search_terms: int = 10, results_per_search: int = 15, database: str = "arxiv") -> list:
     # Generate search terms
     print("Generating %s search terms..." % num_search_terms)
     t0 = time.time()
@@ -70,7 +73,7 @@ def do_embedding_based_search(query: str, num_search_terms: int = 10, results_pe
         print(term)
     
     #ASYNCIO SEARCH ARTICLES
-    doc_list = database_selection_search(search_terms,database,results_per_search)
+    doc_list = database_selection_search(search_terms, filter_string, database, results_per_search)
     t0 = time.time()
     
     # Store documents
