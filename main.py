@@ -195,7 +195,11 @@ def generate_filter_custom(input):
 	else:
 		return gr.Textbox(label = "Custom Filter", visible = False)
 
-with gr.Blocks(theme=gr.themes.Ocean(),css_paths="theming.css",fill_width=True) as demo:
+
+theme = gr.themes.Default().set(block_border_color="#9191A1", input_border_color_focus="*block_border_color",block_label_text_color="*block_border_color")
+
+
+with gr.Blocks(theme=theme, css_paths="theming.css",fill_width=True) as demo:
 	state = gr.State({})
 	title = gr.Label(container=False, value="AI-Powered Research Assistant")
 	dropdown = gr.Dropdown(label="Database Selection", choices=[("Arxiv - STEM Articles", "arxiv"), ("PubMed - Medical Literature", "pubmed")], value="arxiv")
