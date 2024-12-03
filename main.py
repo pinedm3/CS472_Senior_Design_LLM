@@ -196,7 +196,7 @@ def generate_filter_custom(input):
 		return gr.Textbox(label = "Custom Filter", visible = False)
 
 
-theme = gr.themes.Default().set(block_border_color="#9191A1", input_border_color_focus="*block_border_color",block_label_text_color="*block_border_color")
+theme = gr.themes.Default().set(block_border_color="#9191A1", input_border_color_focus="*block_border_color", block_label_text_color="*block_border_color", checkbox_label_border_color="*block_border_color", checkbox_border_color="*block_border_color")
 
 
 with gr.Blocks(theme=theme, css_paths="theming.css",fill_width=True) as demo:
