@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from retriever.retriever import do_embedding_based_search
 from promptchecking.prompt_checkers import illegal_prompt_checker
 import gradio as gr
@@ -8,6 +6,7 @@ import asyncio
 results_per_page = 20
 
 study_type_list = [
+	"",
 	"Adaptive Clinical Trial",
 	"Address",
 	"Autobiography",
@@ -90,6 +89,7 @@ study_type_list = [
 ]
 
 age_range_list = [
+	"",
 	"Child: birth-18 years",
 	"Newborn: birth-1 month",
 	"Infant: birth-23 months",
@@ -106,19 +106,63 @@ age_range_list = [
 	"80 and over: 80+ years",
 ]
 
-def get_current_date():
-	current_date = datetime.now().date()
-	return current_date.strftime("%Y-%m-%d")
+age_range_filter = {
+	"": "",
+	"Child: birth-18 years": "infant[mh] OR child[mh] OR adolescent[mh]",
+	"Newborn: birth-1 month": "infant, newborn[mh]",
+	"Infant: birth-23 months": "infant[mh]",
+	"Infant: 1-23 months": "infant[mh:noexp]",
+	"Preschool Child: 2-5 years": "child, preschool[mh]",
+	"Child: 6-12 years": "child[mh:noexp]",
+	"Adolescent: 13-18 years": "adolescent[mh]",
+	"Adult: 19+ years": "adult[mh]",
+	"Young Adult: 19-24 years": "\"young adult\"[mh]",
+	"Adult: 19-44 years": "adult[mh:noexp]",
+	"Middle Aged + Aged: 45+ years": "(middle aged[mh] OR aged[mh])",
+	"Middle Aged: 45-64 years": "middle aged[mh]",
+	"Aged: 65+ years": "aged[mh]",
+	"80 and over: 80+ years": "aged, 80 and over[mh]",
+}
 
-def do_search(query: str, database: str, state: dict, p_date_from, p_date_to, stu_type, age_r, sex_t, spe_type, cus_filter):
+subject_type = [
+
+]
+
+#def get_current_date():
+#	current_date = datetime.now().date()
+#	return current_date.strftime("%Y-%m-%d")
+
+def do_search(query: str, database: str, state: dict, p_date_from, p_date_to, stu_type, age_r, sex_t, spe_type, cus_filter, a, b, c):
 	print("Checking for prompt injection...")
 	if(illegal_prompt_checker(query,False) == "PROMPTINJECTION"):
 		print("Prompt injection detected.")
 		raise gr.Error("Reprompt with a proper query", 5,True,"Prompt Injection Detected")
 
 	filter_string = ""
-	if p_date_from is not None:
-		filter_string += " AND " + str(p_date_from.year) + '/' + str(p_date_from.month) + '/' + str(p_date_from.day) + ':' + str(p_date_to.year) + '/' + str(p_date_to.month) + '/' + str(p_date_to.day) + "[dp]"
+	if database == 'pubmed':
+		if p_date_from is not None and p_date_from != "" and p_date_to is not None and p_date_to != "":
+			filter_string += " AND " + str(p_date_from.year) + '/' + str(p_date_from.month) + '/' + str(p_date_from.day) + ':' + str(p_date_to.year) + '/' + str(p_date_to.month) + '/' + str(p_date_to.day) + "[dp]"
+		if stu_type is not None and stu_type != "":
+			filter_string += " AND " + str(stu_type) + "[pt]"
+		if age_r is not None and age_r != "":
+			age_r = age_range_filter[age_r]
+			filter_string += " AND " + str(age_r)
+		if sex_t is not None and sex_t != "":
+			filter_string += " AND " + str(sex_t).lower() + "[mh]"
+		if spe_type is not None and spe_type != "":
+			if spe_type == "Non-Human":
+				filter_text = "\"animals\"[mh:noexp]"
+			elif spe_type == "Human":
+				filter_text = "humans[mh]"
+			else:
+				filter_text = ""
+			filter_string += " AND " + filter_text
+		if cus_filter is not None and cus_filter != "":
+			filter_string += " AND " + '(' + str(cus_filter) + ')'
+	#elif database == 'arxiv':
+
+
+
 
 	print(filter_string)
 
@@ -149,51 +193,69 @@ def show_results(state: dict):
 
 def set_filters(input):
 	pubmed_filters = ["Publication Date", "Study Type", "Age", "Sex", "Species", "Custom Filter"]
-	arxiv_filters = []
+	arxiv_filters = ["Publication Date", "Subject", "Phrase", "Custom Filter"]
+	print(input)
 	if input == "pubmed":
-		return gr.update(label="Optional Filters", choices = pubmed_filters, interactive = True, visible=True)
+		return gr.update(label="Optional Filters", choices = pubmed_filters, interactive = True, visible = True, value = None), gr.update(visible = True), gr.update(visible = False)
 	if input == "arxiv":
-		return gr.update(label="Optional Filters", choices = arxiv_filters, visible=False)
+		return gr.update(label="Optional Filters", choices = arxiv_filters, interactive = True, visible = True, value = None), gr.update(visible = False), gr.update(visible = True)
 	else:
-		return gr.update(label="Optional Filters", choices = [])
+		return gr.update(label="Optional Filters", choices = []), gr.update(visible = True), gr.update(visible = False)
 
 def generate_filter_publication(input):
 	if 'Publication Date' in input:
-		print("Enabling components")
-		return gr.update(visible = True), gr.update(visible = True, value = get_current_date())
+		return gr.update(visible = True), gr.update(visible = True)
 	else:
-		print("Disabling components")
-		return gr.update(visible = False, value = None), gr.update(visible = False, value = None)
+		return gr.update(visible = False, value = ""), gr.update(visible = False, value = "")
+
 
 def generate_filter_studytype(input):
 	if 'Study Type' in input:
-		return gr.Dropdown(label = "Study Type", choices = study_type_list, filterable = True, visible = True, interactive = True)
+		return gr.update(label = "Study Type", choices = study_type_list, filterable = True, visible = True)
 	else:
-		return gr.Dropdown(label="Study Type", visible = False)
+		return gr.update(visible = False, value = "")
 
 def generate_filter_age(input):
 	if 'Age' in input:
-		return gr.Dropdown(label = "Age Range", choices = age_range_list, filterable = True, visible = True, interactive = True)
+		return gr.update(label = "Age Range", choices = age_range_list, filterable = True, visible = True, interactive = True)
 	else:
-		return gr.Dropdown(label = "Age Range", visible = False)
+		return gr.update(visible = False, choices = [])
 
 def generate_filter_sex(input):
 	if 'Sex' in input:
-		return gr.Radio(label = "Biological Sex", choices = ["Male", "Female"], visible = True, interactive = True)
+		return gr.update(label = "Biological Sex", choices = ["Male", "Female"], visible = True, interactive = True)
 	else:
-		return gr.Radio(label = "Biological Sex", visible = False)
+		return gr.update(visible = False, choices = [])
 
 def generate_filter_species(input):
 	if 'Species' in input:
-		return gr.Radio(label = "Species", choices = ["Human", "Non-Human"], visible = True, interactive = True)
+		return gr.update(label = "Species", choices = ["Human", "Non-Human"], visible = True, interactive = True)
 	else:
-		return gr.Radio(label = "Species", visible = False)
+		return gr.update(visible = False, choices = [])
 
 def generate_filter_custom(input):
 	if 'Custom Filter' in input:
-		return gr.Textbox(label = "Custom Filter", placeholder = "Type filter here", show_label = True, visible = True, interactive = True)
+		return gr.update(label = "Custom Filter", placeholder = "Type filter here", show_label = True, visible = True, interactive = True)
 	else:
-		return gr.Textbox(label = "Custom Filter", visible = False)
+		return gr.update(visible = False, value = "")
+
+def generate_filter_phrase(input):
+	if 'Phrase' in input:
+		return gr.update(label = "Exact Phrase Match", placeholder = "Type phrase", show_label = True, visible = True, interactive = True)
+	else:
+		return gr.update(visible = False, value = "")
+
+def generate_filter_subject(input):
+	if 'Subject' in input:
+		return gr.update(label = "Subject", choices = subject_type, show_label = True, visible = True, interactive = True)
+	else:
+		return gr.update(visible = False, choices = [])
+
+def generate_filter_cross(input):
+	if "Cross-Listing Preference" in input:
+		return gr.update(label = "Cross-listing Preference", choices = ['Allow', 'Block'], show_label = True, visible = True, interactive = True, value = 'Allow', info = "Allows results cross-listed in multiple subjects. (Defaults to Allowed)")
+	else:
+		return gr.update(visible = False, choices = ['Allow'], value = 'Allow')
 
 
 theme = gr.themes.Default().set(block_border_color="#9191A1", input_border_color_focus="*block_border_color", block_label_text_color="*block_border_color", checkbox_label_border_color="*block_border_color", checkbox_border_color="*block_border_color")
@@ -206,11 +268,11 @@ with gr.Blocks(theme=theme, css_paths="theming.css",fill_width=True) as demo:
 
 	with gr.Row():
 		with gr.Column(scale = 1):
-			enabled_filters = gr.CheckboxGroup(label="Optional Filters", choices = [], interactive = True, visible=False)
-		with gr.Column(scale = 2):
+			enabled_filters = gr.CheckboxGroup(label="Optional Filters", choices = ["Publication Date", "Subject", "Phrase", "Cross-Listing Preference", "Custom Filter"], visible=True)
+		with gr.Column(scale = 2, visible = False) as pubmed:
 			with gr.Row():
-				publication_date_from = gr.DateTime(label = "From", show_label = True, include_time = False, type = 'datetime', visible = False, value = None)
-				publication_date_to = gr.DateTime(label = "To", show_label = True, include_time = False, visible = False, value = None)
+				pubmed_publication_date_from = gr.DateTime(label = "From", show_label = True, include_time = False, type = 'datetime', visible = False)
+				pubmed_publication_date_to = gr.DateTime(label = "To", show_label = True, include_time = False, type = 'datetime', visible = False)
 			with gr.Row():
 				with gr.Column(scale = 1):
 					study_type = gr.Dropdown(visible = False)
@@ -222,15 +284,35 @@ with gr.Blocks(theme=theme, css_paths="theming.css",fill_width=True) as demo:
 				with gr.Column(scale = 1):
 					species_type = gr.Radio(visible = False)
 			with gr.Row():
-				custom_filter = gr.Textbox(visible = False)
+				pubmed_custom_filter = gr.Textbox(visible = False)
+		#["Publication Date", "Subject", "Phrase", "Custom Filter"]
+		with gr.Column(scale = 2, visible = True) as arxiv:
+			with gr.Row():
+				arxiv_publication_date_from = gr.DateTime(label = "From", show_label = True, include_time = False, type = 'datetime', visible = False)
+				arxiv_publication_date_to = gr.DateTime(label = "To", show_label = True, include_time = False, type = 'datetime', visible = False)
+			with gr.Row():
+				with gr.Column(scale = 1):
+					subject = gr.Dropdown(visible = False)
+				with gr.Column(scale = 1):
+					phrase = gr.Textbox(visible = False)
+			with gr.Row():
+				with gr.Column(scale = 1):
+					arxiv_custom_filter = gr.Textbox(visible=False)
+				with gr.Column(scale = 1):
+					cross_list = gr.Radio(visible = False)
 
-	dropdown.change(fn=set_filters, inputs=dropdown, outputs=enabled_filters)
-	enabled_filters.change(fn = generate_filter_publication, inputs = enabled_filters, outputs = (publication_date_from, publication_date_to))
+	dropdown.change(fn=set_filters, inputs=dropdown, outputs=(enabled_filters, pubmed, arxiv))
+	enabled_filters.change(fn = generate_filter_publication, inputs = enabled_filters, outputs = (pubmed_publication_date_from, pubmed_publication_date_to))
+	enabled_filters.change(fn = generate_filter_publication, inputs = enabled_filters, outputs = (arxiv_publication_date_from, arxiv_publication_date_to))
 	enabled_filters.change(fn = generate_filter_studytype, inputs = enabled_filters, outputs = study_type)
 	enabled_filters.change(fn = generate_filter_age, inputs = enabled_filters, outputs = age_range)
 	enabled_filters.change(fn = generate_filter_sex, inputs = enabled_filters, outputs = sex_type)
 	enabled_filters.change(fn = generate_filter_species, inputs = enabled_filters, outputs = species_type)
-	enabled_filters.change(fn = generate_filter_custom, inputs = enabled_filters, outputs = custom_filter)
+	enabled_filters.change(fn = generate_filter_subject, inputs = enabled_filters, outputs = subject)
+	enabled_filters.change(fn = generate_filter_phrase, inputs = enabled_filters, outputs = phrase)
+	enabled_filters.change(fn = generate_filter_cross, inputs = enabled_filters, outputs = cross_list)
+	enabled_filters.change(fn = generate_filter_custom, inputs = enabled_filters, outputs = pubmed_custom_filter)
+	enabled_filters.change(fn = generate_filter_custom, inputs = enabled_filters, outputs = arxiv_custom_filter)
 
 	with gr.Row(equal_height=True):
 		search_bar = gr.Textbox(container=False, placeholder="Ask a question.", max_lines=1)
@@ -243,7 +325,7 @@ with gr.Blocks(theme=theme, css_paths="theming.css",fill_width=True) as demo:
 	gr.on(
 		triggers=[search_bar.submit,search_btn.click],
 		fn=do_search, 
-  		inputs=[search_bar, dropdown, state, publication_date_from, publication_date_to, study_type, age_range, sex_type, species_type, custom_filter],
+  		inputs=[search_bar, dropdown, state, pubmed_publication_date_from, pubmed_publication_date_to, study_type, age_range, sex_type, species_type, pubmed_custom_filter, arxiv_publication_date_from, arxiv_publication_date_to, arxiv_custom_filter],
     	outputs=[search_bar, next_page_btn, prev_page_btn, state],
      	queue=True,concurrency_limit="default"
     ).then(fn=show_results, inputs=[state], outputs=[results])
@@ -251,6 +333,6 @@ with gr.Blocks(theme=theme, css_paths="theming.css",fill_width=True) as demo:
 	next_page_btn.click(fn=next_page, inputs=state, outputs=state).then(fn=show_results, inputs=[state], outputs=[results])
 	prev_page_btn.click(fn=previous_page, inputs=state, outputs=state).then(fn=show_results, inputs=[state], outputs=[results])
 	
-demo.queue(max_size=10,default_concurrency_limit=4)
+demo.queue(max_size=15,default_concurrency_limit=6)
 
 demo.launch()
