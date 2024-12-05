@@ -196,6 +196,11 @@ def do_search(query: str, database: str, state: dict, p_date_from, p_date_to, st
 def showKeywordsButton():
 	return gr.Button(visible=True)
 
+
+def showAccordion():
+	return gr.Accordion(visible=True, open=False)
+
+
 def getKeywords(query: str):
 	keywordList = generate_search_terms(query, 10)
 	outputString = ", ".join(keywordList)
@@ -349,7 +354,8 @@ with gr.Blocks(theme=theme, css_paths="theming.css",fill_width=True) as demo:
 	enabled_filters.change(fn = generate_filter_custom, inputs = enabled_filters, outputs = pubmed_custom_filter)
 	#enabled_filters.change(fn = generate_filter_custom, inputs = enabled_filters, outputs = arxiv_custom_filter)
 
-
+	with gr.Accordion("Testing", visible=False) as accordion:
+		test = gr.Textbox(container=False, placeholder="Ask a question.")
 	with gr.Row(equal_height=True):
 		search_bar = gr.Textbox(container=False, placeholder="Ask a question.",)
 		search_btn = gr.Button("Search", scale=0, min_width=80)
@@ -374,6 +380,12 @@ with gr.Blocks(theme=theme, css_paths="theming.css",fill_width=True) as demo:
 		fn=showKeywordsButton,
 		outputs=keyword_btn
 	)
+
+	gr.on(
+		triggers=[search_bar.submit, search_btn.click],
+		fn=showAccordion,
+		outputs=accordion
+	).then(fn=getKeywords, inputs=search_bar, outputs=test)
 
 	next_page_btn.click(fn=next_page, inputs=state, outputs=state).then(fn=show_results, inputs=[state], outputs=[results])
 	prev_page_btn.click(fn=previous_page, inputs=state, outputs=state).then(fn=show_results, inputs=[state], outputs=[results])
