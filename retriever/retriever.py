@@ -28,7 +28,11 @@ def database_selection_search(search_terms : list[str], filter_string:str, datab
         combined_query += "(" + term + ")"
         if term != search_terms[-1]:
             combined_query += " OR "
-    combined_query += ')' + filter_string
+
+    if database == "arxiv":
+        combined_query = filter_string + "all:" + combined_query + ')'
+    elif database == "pubmed":
+        combined_query += ')' + filter_string
     print("Combined queries: %s" % combined_query)
 
 
