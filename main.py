@@ -188,20 +188,17 @@ def do_search(query: str, database: str, state: dict, p_date_from, p_date_to, st
 
 	print(filter_string)
 
-	state["results"] = do_embedding_based_search(query, filter_string, database=database)
+	search = do_embedding_based_search(query, filter_string, database=database)
+	state["results"] = search["results"]
+	state["search_terms"] = search["search_terms"]
 	state["starting_index"] = 0
-	return gr.skip(),  gr.Button(visible=True),  gr.Button(visible=True), state
 
+	search_terms_string = ""
+	for term in search["search_terms"]:
+		search_terms_string += term + ", "
+	search_terms_string = search_terms_string[:-2]
 
-def showAccordion():
-	return gr.Accordion(visible=True, open=False)
-
-
-def getKeywords(query: str):
-	keywordList = generate_search_terms(query, 10)
-	outputString = ", ".join(keywordList)
-	return outputString
-
+	return gr.skip(),  gr.Button(visible=True),  gr.Button(visible=True), gr.Accordion(visible=True, open=False), gr.Markdown(show_label=False, value=search_terms_string), state
 
 def next_page(state: dict):
 	if "starting_index" in state.keys():
@@ -240,7 +237,6 @@ def generate_filter_publication(input):
 		return gr.update(visible = True), gr.update(visible = True)
 	else:
 		return gr.update(visible = False, value = ""), gr.update(visible = False, value = "")
-
 
 def generate_filter_studytype(input):
 	if 'Study Type' in input:
@@ -362,16 +358,10 @@ with gr.Blocks(theme=theme, css_paths="theming.css",fill_width=True) as demo:
 		triggers=[search_bar.submit,search_btn.click],
 		fn=do_search, 
   		inputs=[search_bar, dropdown, state, pubmed_publication_date_from, pubmed_publication_date_to, study_type, age_range, sex_type, species_type, pubmed_custom_filter, subject],
-    	outputs=[search_bar, next_page_btn, prev_page_btn, state],
+    	outputs=[search_bar, next_page_btn, prev_page_btn, keywords, keyword_bar, state],
      	queue=True,concurrency_limit="default"
     ).then(fn=show_results, inputs=[state], outputs=[results])
-
-	gr.on(
-		triggers=[search_bar.submit, search_btn.click],
-		fn=showAccordion,
-		outputs=keywords
-	).then(fn=getKeywords, inputs=search_bar, outputs=keyword_bar)
-
+	
 	next_page_btn.click(fn=next_page, inputs=state, outputs=state).then(fn=show_results, inputs=[state], outputs=[results])
 	prev_page_btn.click(fn=previous_page, inputs=state, outputs=state).then(fn=show_results, inputs=[state], outputs=[results])
 

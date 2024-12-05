@@ -65,7 +65,7 @@ def database_selection_search(search_terms : list[str], filter_string:str, datab
 
 
 #runs haystack pipeline and calss dataBaseSeclectionSearch
-def do_embedding_based_search(query: str, filter_string: str, num_search_terms: int = 10, results_per_search: int = 15, database: str = "arxiv") -> list:
+def do_embedding_based_search(query: str, filter_string: str, num_search_terms: int = 10, results_per_search: int = 15, database: str = "arxiv") -> dict:
     # Generate search terms
     print("Generating %s search terms..." % num_search_terms)
     t0 = time.time()
@@ -109,7 +109,7 @@ def do_embedding_based_search(query: str, filter_string: str, num_search_terms: 
     
     #Time might not be accurate due to await on doclist?
     print("after databaseSearch took: ", t1-t0)
-    return result['retriever']['documents']
+    return {"results": result['retriever']['documents'], "search_terms": search_terms}
 
 # Example usage
 # from retriever import do_search
