@@ -197,8 +197,9 @@ def showKeywordsButton():
 	return gr.Button(visible=True)
 
 def getKeywords(query: str):
-	keyword_list = generate_search_terms(query, 10)
-	return keyword_list
+	keywordList = generate_search_terms(query, 10)
+	outputString = ", ".join(keywordList)
+	return outputString
 
 def showKeywords(keywords: list):
 	return gr.Textbox(visible=True)
@@ -348,13 +349,13 @@ with gr.Blocks(theme=theme, css_paths="theming.css",fill_width=True) as demo:
 	enabled_filters.change(fn = generate_filter_custom, inputs = enabled_filters, outputs = pubmed_custom_filter)
 	#enabled_filters.change(fn = generate_filter_custom, inputs = enabled_filters, outputs = arxiv_custom_filter)
 
+
 	with gr.Row(equal_height=True):
-		keyword_btn = gr.Button("Show Generated Keywords", visible=False, scale=0)
-	with gr.Row(equal_height=True):
-		keyword_bar = gr.Textbox(container=True, visible=False, max_lines=1, label="Keywords")
-	with gr.Row(equal_height=True):
-		search_bar = gr.Textbox(container=False, placeholder="Ask a question.", max_lines=1)
+		search_bar = gr.Textbox(container=False, placeholder="Ask a question.",)
 		search_btn = gr.Button("Search", scale=0, min_width=80)
+	with gr.Row():
+		keyword_btn = gr.Button("Show Generated Keywords", visible=False, scale=0)
+		keyword_bar = gr.Textbox(container=True, visible=False, label="Keywords", lines=2)
 	results = gr.Markdown(visible=False)
 	with gr.Row(equal_height=True):
 		prev_page_btn = gr.Button("Previous", visible=False)
