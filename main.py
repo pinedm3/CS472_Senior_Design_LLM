@@ -1,5 +1,6 @@
 from retriever.retriever import do_embedding_based_search
 from promptchecking.prompt_checkers import illegal_prompt_checker
+from llm.gemini_api import generate_search_terms
 import gradio as gr
 import asyncio
  
@@ -191,6 +192,18 @@ def do_search(query: str, database: str, state: dict, p_date_from, p_date_to, st
 	state["starting_index"] = 0
 	return gr.skip(),  gr.Button(visible=True),  gr.Button(visible=True), state
 
+
+def showKeywordsButton():
+	return gr.Button(visible=True)
+
+def getKeywords(query: str):
+	keyword_list = generate_search_terms(query, 10)
+	return keyword_list
+
+def showKeywords(keywords: list):
+	return gr.Textbox(visible=True)
+
+
 def next_page(state: dict):
 	if "starting_index" in state.keys():
 		state["starting_index"] = min(state["starting_index"] + results_per_page, len(state["results"]))
@@ -336,6 +349,10 @@ with gr.Blocks(theme=theme, css_paths="theming.css",fill_width=True) as demo:
 	#enabled_filters.change(fn = generate_filter_custom, inputs = enabled_filters, outputs = arxiv_custom_filter)
 
 	with gr.Row(equal_height=True):
+		keyword_btn = gr.Button("Show Generated Keywords", visible=False, scale=0)
+	with gr.Row(equal_height=True):
+		keyword_bar = gr.Textbox(container=True, visible=False, max_lines=1, label="Keywords")
+	with gr.Row(equal_height=True):
 		search_bar = gr.Textbox(container=False, placeholder="Ask a question.", max_lines=1)
 		search_btn = gr.Button("Search", scale=0, min_width=80)
 	results = gr.Markdown(visible=False)
@@ -351,9 +368,15 @@ with gr.Blocks(theme=theme, css_paths="theming.css",fill_width=True) as demo:
      	queue=True,concurrency_limit="default"
     ).then(fn=show_results, inputs=[state], outputs=[results])
 
+	gr.on(
+		triggers=[search_bar.submit, search_btn.click],
+		fn=showKeywordsButton,
+		outputs=keyword_btn
+	)
+
 	next_page_btn.click(fn=next_page, inputs=state, outputs=state).then(fn=show_results, inputs=[state], outputs=[results])
 	prev_page_btn.click(fn=previous_page, inputs=state, outputs=state).then(fn=show_results, inputs=[state], outputs=[results])
-	
+	keyword_btn.click(fn=getKeywords, inputs=search_bar, outputs=keyword_bar).then(fn=showKeywords,inputs=search_bar, outputs=keyword_bar)
 demo.queue(max_size=15,default_concurrency_limit=6)
 
 demo.launch()
