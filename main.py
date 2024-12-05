@@ -354,14 +354,15 @@ with gr.Blocks(theme=theme, css_paths="theming.css",fill_width=True) as demo:
 	enabled_filters.change(fn = generate_filter_custom, inputs = enabled_filters, outputs = pubmed_custom_filter)
 	#enabled_filters.change(fn = generate_filter_custom, inputs = enabled_filters, outputs = arxiv_custom_filter)
 
-	with gr.Accordion("Testing", visible=False) as accordion:
-		test = gr.Textbox(container=False, placeholder="Ask a question.")
+
 	with gr.Row(equal_height=True):
 		search_bar = gr.Textbox(container=False, placeholder="Ask a question.",)
 		search_btn = gr.Button("Search", scale=0, min_width=80)
-	with gr.Row():
+	"""with gr.Row():
 		keyword_btn = gr.Button("Show Generated Keywords", visible=False, scale=0)
-		keyword_bar = gr.Textbox(container=True, visible=False, label="Keywords", lines=2)
+		keyword_bar = gr.Textbox(container=True, visible=False, label="Keywords", lines=2)"""
+	with gr.Accordion("Generated Keywords", visible=False) as keywords:
+		keyword_bar = gr.Textbox(container=True, lines=2, show_label=)
 	results = gr.Markdown(visible=False)
 	with gr.Row(equal_height=True):
 		prev_page_btn = gr.Button("Previous", visible=False)
@@ -375,21 +376,21 @@ with gr.Blocks(theme=theme, css_paths="theming.css",fill_width=True) as demo:
      	queue=True,concurrency_limit="default"
     ).then(fn=show_results, inputs=[state], outputs=[results])
 
-	gr.on(
+	"""gr.on(
 		triggers=[search_bar.submit, search_btn.click],
 		fn=showKeywordsButton,
 		outputs=keyword_btn
-	)
+	)"""
 
 	gr.on(
 		triggers=[search_bar.submit, search_btn.click],
 		fn=showAccordion,
-		outputs=accordion
-	).then(fn=getKeywords, inputs=search_bar, outputs=test)
+		outputs=keywords
+	).then(fn=getKeywords, inputs=search_bar, outputs=keyword_bar)
 
 	next_page_btn.click(fn=next_page, inputs=state, outputs=state).then(fn=show_results, inputs=[state], outputs=[results])
 	prev_page_btn.click(fn=previous_page, inputs=state, outputs=state).then(fn=show_results, inputs=[state], outputs=[results])
-	keyword_btn.click(fn=getKeywords, inputs=search_bar, outputs=keyword_bar).then(fn=showKeywords,inputs=search_bar, outputs=keyword_bar)
+	#keyword_btn.click(fn=getKeywords, inputs=search_bar, outputs=keyword_bar).then(fn=showKeywords,inputs=search_bar, outputs=keyword_bar)
 demo.queue(max_size=15,default_concurrency_limit=6)
 
 demo.launch()
